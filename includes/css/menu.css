@@ -1,0 +1,136 @@
+* {
+    font-family: 'Poppins', sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    width: 100%;
+    background: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    
+}
+
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 400;
+    margin: 0 auto;
+    padding: 0 20px;
+       position: relative;
+}
+
+#logo1 {
+    width: 300px;
+    height: auto;
+    object-fit: contain;
+}
+
+#logo2 {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+}
+
+.barraNavegacion {
+    background-color: #45a049;
+    color: white;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: auto;
+    position: relative;
+}
+
+.menu {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+    display: block;
+}
+
+.menu li:hover,
+#cuenta:hover,
+#cerrarSesion:hover {
+    background-color: #2f6d32;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.Encabezado {
+    min-height: 80vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../multimedia/encabezado.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.Encabezado h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.centro {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#cuenta,
+#cerrarSesion {
+    padding: 10px 15px;
+    color: white;
+}
+
+#welc {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+#cerrarSesion h4 {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* CONTENIDO PRINCIPAL */
+.contenido-principal {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - 80vh - 120px);
+    background-color: #f5f5f5;
+}
+
