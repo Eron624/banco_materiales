@@ -31,7 +31,7 @@
                     <li><a href="dashboard.html" id="inicio-link">INICIO</a></li>
                 </ul>
                 
-                <div id="cerrarSesion" onclick="cerrarSesion()">
+                <div id="cerrarSesion" onclick="logout()">
                     <h4>CERRAR SESIÓN</h4> 
                 </div>
             </nav>
@@ -46,11 +46,13 @@
         <div class="tarjeta">
             <div class="tarjeta-contenido">
                 <h4 class="tarjeta-titulo">Nueva publicación</h4>
-                <form id="formPublicacion">
+                <form id="formPublicacion" onsubmit="event.preventDefault(); agregarPublicacion(event);">
                     <input class="campo-texto" type="text" placeholder="Título del material" id="titulo" required>
                     <textarea class="area-texto" placeholder="Descripción del material" id="descripcion" rows="3" required></textarea>
                     <input class="campo-archivo" type="file" id="imagen" accept="image/*">
-                    <button type="submit" class="boton boton-publicar">Publicar</button>
+                    <button type="submit" class="boton boton-publicar">
+                        Publicar
+                    </button>
                 </form>
             </div>
         </div>
@@ -122,15 +124,16 @@
         </div>
     </main>
 
+    <dialog id='msg'>
+        <h2 id='msg_titulo'>CERRAR SESIÓN</h2>
+        <p id='msg_cuerpo'>¿Estás seguro de Cerrar Sesión?</p>
+        <button id='msg_cerrar' class="boton msg_boton">CERRAR SESIÓN</button>
+        <button id="cancelar" class="boton msg_boton">CANCELAR</button>
+    </dialog>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Función para cerrar sesión
-        function cerrarSesion() {
-            if(confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-                window.location.href = '../index.html';
-            }
-        }
+    <!-- <script>
         
         // Función para agregar comentarios
         function agregarComentario(form) {
@@ -144,14 +147,15 @@
         }
         
         // Manejar el formulario de nueva publicación
-        document.getElementById('formPublicacion').addEventListener('submit', function(e) {
+        /*document.ge 'formPublicacion').addEventListener('sub e) {
             e.preventDefault();
             const titulo = document.getElementById('titulo').value;
             const descripcion = document.getElementById('descripcion').value;
             alert('Publicación creada: ' + titulo);
             this.reset();
-        });
-    </script>
+        });*/
+        </script> -->
+        <script src="../includes/js/dashboardJS.js"></script>
 </body>
 
 </html>

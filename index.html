@@ -36,11 +36,74 @@
             <button type="submit">Iniciar Sesión</button>
 
             <div class="links">
-                <a href="#">Registrarse</a>
+                <a href="#" onclick="dialogRegistro.showModal(); return false;">Registrarse</a>
             </div>
         </form>
     </div>
 <script src="./includes/js/indexJS.js" defer></script>
+<dialog id="msg_2">
+    <h2 id='msg_titulo_2'></h2>
+    <p id='msg_cuerpo_2'></p>
+    <button id='msg_cerrar_2' class="boton msg_boton" onclick="msg_2.close();"">CERRAR</button>
+</dialog>
+<dialog id='msg_3'>
+    <h2 id='msg_titulo_3'></h2>
+    <p id='msg_cuerpo_3'></p>
+    <button id='msg_cerrar_3' class=" boton msg_boton" onclick="msg_3.close();">CERRAR</button>
+</dialog>
+<dialog id='dialogRegistro'>
+    <h2>REGISTRAR NUEVO ESTUDIANTE</h2>
+
+    <form class="formulario-registro" onsubmit="event.preventDefault(); registroNuevo();" id="formRegis">
+        <div class="campo">
+            <label for="user">Número de Control</label>
+            <input type="text" id="user" name="user" required>
+        </div>
+
+        <div class="campo">
+            <label for="pass">Contraseña</label>
+            <input type="password" id="pass" name="pass" required>
+        </div>
+
+        <div class="campo-doble">
+            <div class="campo">
+                <label for="primer_nombre">Primer Nombre</label>
+                <input type="text" id="primer_nombre" name="primer_nombre" required>
+            </div>
+            <div class="campo">
+                <label for="segundo_nombre">Segundo Nombre</label>
+                <input type="text" id="segundo_nombre" name="segundo_nombre">
+            </div>
+        </div>
+
+        <div class="campo-doble">
+            <div class="campo">
+                <label for="apell_pat">Apellido Paterno</label>
+                <input type="text" id="apell_pat" name="apell_pat" required>
+            </div>
+            <div class="campo">
+                <label for="apell_mat">Apellido Materno</label>
+                <input type="text" id="apell_mat" name="apell_mat">
+            </div>
+        </div>
+
+        <div class="campo">
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" name="correo" required>
+        </div>
+
+        <div class="campo">
+            <label for="celular">Celular</label>
+            <input type="text" id="celular" name="celular" required>
+        </div>
+
+        <div class="botones-registro">
+            <button type="button" id="btnCancelarRegistro" class="boton btn-cancelar"
+                onclick="dialogRegistro.close(); formRegis.reset();">CANCELAR</button>
+            <button type="submit" id="btnRegistrar" class="boton btn-registrar">REGISTRAR</button>
+        </div>
+    </form>
+</dialog>
 </body>
 
 </html>
