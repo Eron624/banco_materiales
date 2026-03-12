@@ -4,39 +4,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
+    <title>Inicio - Banco de Materiales</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../includes/css/login.css">
-        <link rel="stylesheet" href="/includes/css/menu.css">
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    
+    <!-- CSS Personalizados -->
+    <link rel="stylesheet" href="../includes/css/menu.css">
+    <link rel="stylesheet" href="../includes/css/dashboard.css">
 </head>
 
 <body>
     <!-- Encabezado -->
     <header>
         <div class="encabezado">
-            <img id="logo1" src="../includes/multimedia/logoTec.jpg" alt="Tecnológico Nacional de México"
-                title="TEC NM">
-            <img id="logo2" src="../includes/multimedia/logoTec2.jpg" alt="Instituto Tecnológico de Chihuahua 2"
-                title="ITCH 2">
+            <img id="logo1" src="../includes/multimedia/logoTec.jpg" alt="Tecnológico Nacional de México" title="TEC NM">
+            <img id="logo2" src="../includes/multimedia/logoTec2.jpg" alt="Instituto Tecnológico de Chihuahua 2" title="ITCH 2">
         </div>
+        
         <div class="barraNavegacion">
             <nav>
                 <ul class="menu">
-                    <li><a href="" id="inicio-link"><i class="fa-solid fa-house"></i> INICIO</a></li>
+                    <li><a href="dashboard.html" id="inicio-link">INICIO</a></li>
                 </ul>
-                <div class="centro">
-                    <div id="cuenta"><i class="fa-solid fa-user"></i></div>
-                    <h5 id="welc"></h5>
-                </div>
-                <div id="cerrarSesion">
-                    <h4>CERRAR SESIÓN</h4>
+                
+                <div id="cerrarSesion" onclick="cerrarSesion()">
+                    <h4>CERRAR SESIÓN</h4> 
                 </div>
             </nav>
         </div>
     </header>
 
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenedor">
+        <h2 class="titulo-pagina">Banco de Materiales</h2>
+
+        <!-- FORMULARIO DE PUBLICACIÓN -->
+        <div class="tarjeta">
+            <div class="tarjeta-contenido">
+                <h4 class="tarjeta-titulo">Nueva publicación</h4>
+                <form id="formPublicacion">
+                    <input class="campo-texto" type="text" placeholder="Título del material" id="titulo" required>
+                    <textarea class="area-texto" placeholder="Descripción del material" id="descripcion" rows="3" required></textarea>
+                    <input class="campo-archivo" type="file" id="imagen" accept="image/*">
+                    <button type="submit" class="boton boton-publicar">Publicar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- PUBLICACIONES -->
+        <div id="publicaciones">
+            <!-- Publicación 1 -->
+            <div class="tarjeta">
+                <div class="tarjeta-contenido">
+                    <div class="publicacion-encabezado">
+                        <h5 class="publicacion-titulo">Calculadora Científica Usada</h5>
+                        <span class="estado estado-disponible">Disponible</span>
+                    </div>
+
+                    <!-- Sin imagen por ahora -->
+                    
+                    <p class="publicacion-descripcion">Calculadora científica usada pero en buenas condiciones. Ideal para estudiantes de ingeniería.</p>
+                    
+                    <div class="publicacion-metadata">
+                        <small class="texto-secundario">Publicado hace 2 horas</small><br>
+                        <small class="texto-secundario">Juan Pérez</small>
+                    </div>
+                    
+                    <h6 class="comentarios-titulo">Comentarios (2)</h6>
+                    <ul class="lista-comentarios">
+                        <li class="comentario"><strong>María:</strong> ¿Tiene manual?</li>
+                        <li class="comentario"><strong>Carlos:</strong> ¿Dónde te puedo contactar?</li>
+                    </ul>
+                    
+                    <form class="formulario-comentario" onsubmit="event.preventDefault(); agregarComentario(this)">
+                        <div class="grupo-comentario">
+                            <input type="text" class="campo-comentario" placeholder="Escribe un comentario..." required>
+                            <button class="boton boton-comentar" type="submit">Publicar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Publicación 2 -->
+            <div class="tarjeta">
+                <div class="tarjeta-contenido">
+                    <div class="publicacion-encabezado">
+                        <h5 class="publicacion-titulo">Protoboard</h5>
+                        <span class="estado estado-disponible">Disponible</span>
+                    </div>
+
+                    <!-- Sin imagen por ahora -->
+                    
+                    <p class="publicacion-descripcion">Protoboard en buen estado, sigue funcionando perfectamente. Ideal para proyectos de electrónica.</p>
+                    
+                    <div class="publicacion-metadata">
+                        <small class="texto-secundario">Publicado hace 5 horas</small><br>
+                        <small class="texto-secundario">Ana García</small>
+                    </div>
+                    
+                    <h6 class="comentarios-titulo">Comentarios (1)</h6>
+                    <ul class="lista-comentarios">
+                        <li class="comentario"><strong>Luis:</strong> Me interesa, ¿todavía lo tienes?</li>
+                    </ul>
+                    
+                    <form class="formulario-comentario" onsubmit="event.preventDefault(); agregarComentario(this)">
+                        <div class="grupo-comentario">
+                            <input type="text" class="campo-comentario" placeholder="Escribe un comentario..." required>
+                            <button class="boton boton-comentar" type="submit">Publicar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para cerrar sesión
+        function cerrarSesion() {
+            if(confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                window.location.href = '../index.html';
+            }
+        }
+        
+        // Función para agregar comentarios
+        function agregarComentario(form) {
+            const input = form.querySelector('input');
+            if(input.value.trim()) {
+                alert('Comentario enviado: ' + input.value);
+                input.value = '';
+            } else {
+                alert('Por favor escribe un comentario');
+            }
+        }
+        
+        // Manejar el formulario de nueva publicación
+        document.getElementById('formPublicacion').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const titulo = document.getElementById('titulo').value;
+            const descripcion = document.getElementById('descripcion').value;
+            alert('Publicación creada: ' + titulo);
+            this.reset();
+        });
+    </script>
 </body>
 
 </html>
