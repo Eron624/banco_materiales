@@ -110,7 +110,7 @@ async function agregarPublicacion(event) {
         })
             .then(respuesta => respuesta.json())
             .then(datos => {
-                console.log(datos);
+                //console.log(datos);
 
                 // Limpiar el formulario después de subir
                 document.getElementById("titulo").value = "";
@@ -202,7 +202,7 @@ function traerPublicaciones()
         })
         .then(datos => {
             if (datos.error == 0) {
-                console.log(datos.data);
+                //console.log(datos.data);
                 generarPublicaciones(datos.data);
             }
             else {
@@ -225,7 +225,7 @@ function generarPublicaciones(datos)
         publi.innerHTML = `
         <div class="tarjeta">
             <div class="tarjeta-contenido">
-                <div class="publicacion-encabezado">
+                <div class="publicacion-encabezado" id="encabe${index}">
                     <h5 class="publicacion-titulo">${item.titulo}</h5>
                     <span class="estado estado-disponible">Disponible</span>
                 </div>
@@ -251,7 +251,69 @@ function generarPublicaciones(datos)
                 </form>
             </div>
         </div>`;
-
         publicaciones.appendChild(publi);
+
+        let encabe = document.getElementById(`encabe${index}`);
+
+        if (item.usuario == usuario) {
+            let divBtnErase = document.createElement("div");
+
+            divBtnErase.innerHTML = `<button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarPubli(${item.idPubli})">
+                        Eliminar
+                    </button>`;
+
+            encabe.appendChild(divBtnErase);
+        }
+        else {
+
+        }
+    });
+}
+
+function eliminarPubli(idPubli) {
+    //console.log(idPubli);
+    msg_4.showModal();
+    let msg_eliminar = document.getElementById("msg_eliminar");
+    let nuevoBoton = msg_eliminar.cloneNode(true);
+    msg_eliminar.parentNode.replaceChild(nuevoBoton, msg_eliminar);
+    msg_eliminar = nuevoBoton;
+
+    let datos = { idPubli: idPubli };
+    msg_eliminar.addEventListener("click", () => {
+        msg_4.close();
+        let url = "../includes/php/eliminar_publicacion.php";
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(datos),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                //console.log(datos);
+                let error = datos.error;
+                let mensaje = datos.mensaje;
+                if (error == 1) {
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'ERROR 1';
+                    msg_3.showModal();
+                }
+                else if (error == 100) {
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'ERROR EN LA CONEXION';
+                    msg_3.showModal();
+                }
+                else if (error == 0) {
+                    right = 1;
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'ELIMINADA CORRECTAMENTE';
+                    msg_3.showModal();
+                    traerPublicaciones();
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
     });
 }
