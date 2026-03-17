@@ -1,14 +1,35 @@
-window.addEventListener("load", () => 
-{
+window.addEventListener("load", () => {
     security();
-    traerPublicaciones();
+    cargarMasPublicaciones();
+    window.addEventListener('scroll', function () {
+        if (cargando || !hayMasPublicaciones) return;
+
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+            cargarMasPublicaciones();
+        }
+    });
 });
 
 let usuario;
 let nombre;
+let paginaActual = 1;
+let cargando = false;
+let hayMasPublicaciones = true;
+let paginaComentarios = {};
 
-function security()
+function datosUsuario(nombre, usuario)
 {
+    let divCuenta = document.getElementById("divCuenta");
+
+    let cuenta = document.createElement("div");
+    cuenta.className = "text-white px-3 py-2 rounded";
+
+    cuenta.innerHTML = `<h4 class="m-0 fs-6">Hola ${nombre}, ${usuario}</h4>`;
+
+    divCuenta.appendChild(cuenta);
+}
+
+function security() {
     let url = "../includes/php/dashboard.php";
     fetch(url)
         .then(respuesta => {
@@ -22,6 +43,8 @@ function security()
             else {
                 usuario = datos.usuario;
                 nombre = datos.nombre;
+
+                datosUsuario(nombre, usuario);
             }
         })
         .catch(error => {
@@ -53,12 +76,11 @@ function logout() {
     });
 }
 
-function formatearFechaISO()
-{
+function formatearFechaISO() {
     const fecha = new Date();
 
     const año = fecha.getFullYear();
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Meses 0-11
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
     const dia = String(fecha.getDate()).padStart(2, '0');
     const hora = String(fecha.getHours()).padStart(2, '0');
     const minuto = String(fecha.getMinutes()).padStart(2, '0');
@@ -68,7 +90,7 @@ function formatearFechaISO()
 }
 
 async function agregarPublicacion(event) {
-    event.preventDefault(); // Prevenir el envío del formulario
+    event.preventDefault();
 
     let titulo = document.getElementById("titulo").value;
     let descripcion = document.getElementById("descripcion").value;
@@ -110,7 +132,11 @@ async function agregarPublicacion(event) {
                 if (preview) {
                     preview.remove();
                 }
-                traerPublicaciones();
+
+                paginaActual = 1;
+                hayMasPublicaciones = true;
+                document.getElementById("publicaciones").innerHTML = '';
+                cargarMasPublicaciones();
             })
             .catch(error => {
                 console.log("Error en fetch:", error);
@@ -128,13 +154,11 @@ function subirFoto() {
         const apiKey = '2133fd0d3058780fade0da7cb3bcf6e6';
         const imageFile = document.getElementById("imagen").files[0];
 
-        // Validar que se haya seleccionado una imagen (aunque esto ya se verifica antes)
         if (!imageFile) {
-            resolve(""); // Si no hay imagen, resolvemos con string vacío
+            resolve("");
             return;
         }
 
-        // Validar el tipo de archivo
         if (!imageFile.type.startsWith('image/')) {
             reject(new Error("El archivo seleccionado no es una imagen"));
             return;
@@ -144,7 +168,6 @@ function subirFoto() {
 
         reader.onload = async () => {
             try {
-                // Eliminar el prefijo "data:image/jpeg;base64,"
                 const base64Image = reader.result.split(',')[1];
 
                 const formData = new FormData();
@@ -159,7 +182,6 @@ function subirFoto() {
                 const data = await response.json();
 
                 if (data.success) {
-                    // Devolver la URL de visualización (display_url)
                     resolve(data.data.display_url);
                 } else {
                     reject(new Error("Error al subir la imagen a imgbb"));
@@ -177,33 +199,23 @@ function subirFoto() {
     });
 }
 
-function traerPublicaciones()
-{
-    let url = "../includes/php/traerPubli.php";
-    fetch(url)
-        .then(respuesta => {
-            return respuesta.json();
-        })
-        .then(datos => {
-            if (datos.error == 0) {
-                todasLasPublicaciones = datos.data;
-                generarPublicaciones(datos.data);
-            }
-            else {
-                
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        });
+function traerPublicaciones() {
+    paginaActual = 1;
+    hayMasPublicaciones = true;
+    document.getElementById("publicaciones").innerHTML = '';
+    cargarMasPublicaciones();
 }
 
-function generarPublicaciones(datos)
-{
+function generarPublicaciones(datos, reiniciarPaginacion = false) {
     let publicaciones = document.getElementById("publicaciones");
-    publicaciones.innerHTML = ``;
-    datos.forEach((item, index) =>
-    {
+
+    if (reiniciarPaginacion) {
+        publicaciones.innerHTML = '';
+        paginaActual = 1;
+        hayMasPublicaciones = false;
+    }
+
+    datos.forEach((item, index) => {
         let col = document.createElement("div");
         col.className = "col-12";
 
@@ -216,12 +228,12 @@ function generarPublicaciones(datos)
         publi.innerHTML = `
         <div class="tarjeta">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-3" id="encabe${index}">
+                <div class="d-flex justify-content-between align-items-start mb-3" id="encabe${item.idPubli}">
                     <h5 class="card-title h5 mb-0">${item.titulo}</h5>
                     <span class="badge ${badgeClass}" id="badge${item.idPubli}">${badgeText}</span>
                 </div>
 
-                ${item.urlImage ? `
+                ${item.urlImage && item.urlImage.trim() !== '' ? `
                 <div class="text-center mb-3">
                     <img src="${item.urlImage}" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;" alt="${item.titulo}">
                 </div>
@@ -236,6 +248,12 @@ function generarPublicaciones(datos)
                 <h6 class="text-success fw-semibold mt-3 mb-2" id="cantidadComent${item.idPubli}"></h6>
                 <ul class="list-unstyled" id="listaComent${item.idPubli}">
                 </ul>
+                <button class="btn btn-link btn-sm text-success p-0 mb-2"
+                        id="btnCargarMasComent${item.idPubli}" 
+                        onclick="cargarMasComentarios(${item.idPubli})"
+                        style="display: none;">
+                    Cargar más comentarios...
+                </button>
                     
                 <form class="mt-3" id="formComent${item.idPubli}" onsubmit="event.preventDefault(); agregarComent(${item.idPubli});">
                     <div class="input-group">
@@ -247,7 +265,7 @@ function generarPublicaciones(datos)
         </div>`;
         publicaciones.appendChild(publi);
 
-        let encabe = document.getElementById(`encabe${index}`);
+        let encabe = document.getElementById(`encabe${item.idPubli}`);
 
         if (item.usuario == usuario) {
             let divBtnErase = document.createElement("div");
@@ -269,25 +287,8 @@ function generarPublicaciones(datos)
 }
 
 function traerComentarios(idPubli) {
-    idPubli = Number(idPubli);
-    let datos = { idPubli: idPubli };
-    let url = "../includes/php/traerComentarios.php";
-    fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(datos),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            if (datos.error == 0) {
-                generarComentarios(datos.data, idPubli);
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    paginaComentarios[idPubli] = 1;
+    cargarMasComentarios(idPubli);
 }
 
 function generarComentarios(datos, idPubli) {
@@ -370,6 +371,7 @@ function eliminarComentario(idComent, idPubli) {
                     msg_3.showModal();
 
                     document.getElementById(`listaComent${idPubli}`).innerHTML = ``;
+                    paginaComentarios[idPubli] = 1;
                     traerComentarios(idPubli);
                 }
             })
@@ -418,7 +420,11 @@ function eliminarPubli(idPubli) {
                     msg_3.showModal();
 
                     eliminarComentariosPubli(idPubli);
-                    traerPublicaciones();
+
+                    paginaActual = 1;
+                    hayMasPublicaciones = true;
+                    document.getElementById("publicaciones").innerHTML = '';
+                    cargarMasPublicaciones();
                 }
             })
             .catch(error => {
@@ -465,6 +471,7 @@ function agregarComent(idPubli) {
 
                 document.getElementById(`formComent${idPubli}`).reset();
                 document.getElementById(`listaComent${idPubli}`).innerHTML = ``;
+                paginaComentarios[idPubli] = 1;
                 traerComentarios(idPubli);
             }
         })
@@ -519,7 +526,11 @@ function buscarMateriales() {
     let divResultado = document.getElementById('resultadoBusqueda');
 
     if (textoBusqueda === '') {
-        generarPublicaciones(todasLasPublicaciones);
+        // Si la búsqueda está vacía, restaurar la carga infinita
+        paginaActual = 1;
+        hayMasPublicaciones = true;
+        document.getElementById("publicaciones").innerHTML = '';
+        cargarMasPublicaciones();
         divResultado.innerHTML = '';
         return;
     }
@@ -535,8 +546,12 @@ function buscarMateriales() {
     });
 
     if (resultados.length > 0) {
-        generarPublicaciones(resultados);
+        // Usar generarPublicaciones con reiniciarPaginacion = true
+        generarPublicaciones(resultados, true);
         divResultado.innerHTML = `Se encontraron ${resultados.length} resultado(s) para "${textoBusqueda}"`;
+
+        // Desactivar el scroll infinito mientras se muestran resultados de búsqueda
+        hayMasPublicaciones = false;
     } else {
         let publicacionesDiv = document.getElementById('publicaciones');
         publicacionesDiv.innerHTML = `
@@ -551,13 +566,18 @@ function buscarMateriales() {
             </div>
         `;
         divResultado.innerHTML = '';
+        hayMasPublicaciones = false;
     }
 }
 
 function limpiarBusqueda() {
     document.getElementById('busqueda').value = '';
     document.getElementById('resultadoBusqueda').innerHTML = '';
-    generarPublicaciones(todasLasPublicaciones);
+
+    paginaActual = 1;
+    hayMasPublicaciones = true;
+    document.getElementById("publicaciones").innerHTML = '';
+    cargarMasPublicaciones();
 }
 
 function cambiarDisponibilidad(idPubli, disponibilidadActual) {
@@ -635,4 +655,108 @@ function actualizarBadgeDisponibilidad(idPubli, nuevaDisponibilidad) {
             boton.setAttribute('onclick', `cambiarDisponibilidad(${idPubli}, ${nuevaDisponibilidad})`);
         }
     });
+}
+
+function cargarMasPublicaciones() {
+    if (document.getElementById('busqueda').value.trim() !== '') return;
+
+    if (cargando || !hayMasPublicaciones) return;
+
+    cargando = true;
+
+    let url = `../includes/php/traerPubliPaginado.php?pagina=${paginaActual}`;
+    fetch(url)
+        .then(respuesta => {
+            return respuesta.json();
+            //return respuesta.text();
+        })
+        .then(datos => {
+            if (datos.error == 0) {
+                if (paginaActual === 1) {
+                    todasLasPublicaciones = datos.data;
+                    document.getElementById("publicaciones").innerHTML = '';
+                } else {
+                    todasLasPublicaciones = [...todasLasPublicaciones, ...datos.data];
+                }
+                // Aquí usar generarPublicaciones sin reiniciar (false)
+                generarPublicaciones(datos.data, false);
+                hayMasPublicaciones = datos.hayMas;
+                paginaActual++;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .finally(() => {
+            cargando = false;
+        });
+}
+
+function cargarMasComentarios(idPubli) {
+    if (!paginaComentarios[idPubli]) {
+        paginaComentarios[idPubli] = 1;
+    }
+
+    let datos = {
+        idPubli: idPubli,
+        pagina: paginaComentarios[idPubli]
+    };
+
+    let url = "../includes/php/traerComentariosPaginado.php";
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(datos),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            if (datos.error == 0) {
+                if (paginaComentarios[idPubli] === 1) {
+                    generarComentarios(datos.data, idPubli);
+                } else {
+                    let listaComent = document.getElementById(`listaComent${idPubli}`);
+                    datos.data.forEach(item => {
+                        let li = document.createElement("li");
+                        li.className = "comentario mb-2";
+                        li.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-center" id="divComent${item.idComent}">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <strong>${item.primer_nombre} ${item.apell_pat}:</strong>
+                                        <span class="small text-secondary">${item.fecha_coment}</span>
+                                    </div>
+                                    <div class="mt-1">${item.contenido}</div>
+                                </div>
+                            </div>
+                        `;
+                        listaComent.appendChild(li);
+
+                        if (item.usuario == usuario) {
+                            let divComent = document.getElementById(`divComent${item.idComent}`);
+                            let divBtnEraseComent = document.createElement("div");
+                            divBtnEraseComent.innerHTML = `<button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarComentario(${item.idComent}, ${idPubli})">
+                                        Eliminar
+                                    </button>`;
+                            divComent.appendChild(divBtnEraseComent);
+                        }
+                    });
+                }
+
+                paginaComentarios[idPubli]++;
+
+                let btnCargarMas = document.getElementById(`btnCargarMasComent${idPubli}`);
+                if (btnCargarMas) {
+                    if (datos.hayMas) {
+                        btnCargarMas.style.display = 'inline-block';
+                    } else {
+                        btnCargarMas.style.display = 'none';
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }

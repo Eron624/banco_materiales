@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Banco de Materiales</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- CSS Personalizados -->
     <link rel="stylesheet" href="../includes/css/dashboard.css">
 </head>
@@ -19,15 +18,16 @@
 <body class="bg-light">
     <!-- Encabezado -->
     <header class="bg-white shadow-sm">
-            <div class="container">
-                <div class="d-flex flex-wrap justify-content-center justify-content-md-between align-items-center gap-3 py-3">
-                    <img id="logo1" src="../includes/multimedia/logoTec.jpg" class="img-fluid rounded"
-                        style="max-width: 200px; max-height: 80px;" alt="Tecnológico Nacional de México" title="TEC NM">
-                    <img id="logo2" src="../includes/multimedia/logoTec2.jpg" class="img-fluid rounded"
-                        style="max-width: 200px; max-height: 80px;" alt="Instituto Tecnológico de Chihuahua 2" title="ITCH 2">
-                </div>
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-center justify-content-md-between align-items-center gap-3 py-3">
+                <img id="logo1" src="../includes/multimedia/logoTec.jpg" class="img-fluid rounded"
+                    style="max-width: 200px; max-height: 80px;" alt="Tecnológico Nacional de México" title="TEC NM">
+                <img id="logo2" src="../includes/multimedia/logoTec2.jpg" class="img-fluid rounded"
+                    style="max-width: 200px; max-height: 80px;" alt="Instituto Tecnológico de Chihuahua 2"
+                    title="ITCH 2">
             </div>
-        
+        </div>
+
         <!-- <div class="barraNavegacion"> -->
         <nav class="navbar navbar-expand-lg" style="background-color: #45a049;">
             <div class="container">
@@ -41,14 +41,16 @@
                             <a class="nav-link text-white" href="dashboard.html" id="inicio-link">INICIO</a>
                         </li>
                     </ul>
+                    <div id="divCuenta" class="d-flex">
+                    </div>
                     <div class="d-flex">
                         <div id="cerrarSesion" class="text-white px-3 py-2 rounded" style="cursor: pointer;" onclick="logout()">
                             <h4 class="m-0 fs-6">CERRAR SESIÓN</h4>
                         </div>
                     </div>
-                    </div>
-                    </div>
-            </nav>
+                </div>
+                </div>
+                </nav>
     </header>
 
     <!-- CONTENIDO PRINCIPAL -->
@@ -77,7 +79,8 @@
                     <div class="d-flex flex-column flex-md-row gap-2">
                         <div class="flex-grow-1">
                             <input type="text" class="form-control form-control-lg" id="busqueda" name="busqueda"
-                                placeholder="Buscar materiales por título, descripción o autor..." style="border-radius: 10px;">
+                                placeholder="Buscar materiales por título, descripción o autor..."
+                                style="border-radius: 10px;">
                         </div>
                         <div>
                             <button type="submit" class="btn btn-success btn-lg w-100"
@@ -108,7 +111,7 @@
             </div>
         </div>
     </dialog>
-        
+
     <dialog id='msg_3' class="p-0 border-0 rounded-3 shadow-lg">
         <div class="modal-content p-4" style="min-width: 300px;">
             <h2 id='msg_titulo_3' class="h4 mb-3"></h2>
@@ -141,7 +144,8 @@
     <dialog id="msg_6" class="p-0 border-0 rounded-3 shadow-lg">
         <div class="modal-content p-4" style="min-width: 300px;">
             <h3 id='msg_titulo_6' class="h4 mb-3 text-danger">Confirmar cambio de disponibilidad</h3>
-            <p d='msg_cuerpo_6' class="mb-4">¿Estás seguro de que deseas cambiar la disponibilidad de esta publicación?</p>
+            <p d='msg_cuerpo_6' class="mb-4">¿Estás seguro de que deseas cambiar la disponibilidad de esta publicación?
+            </p>
             <div class="d-flex gap-2 justify-content-end">
                 <button id="msg_confirmar_6" class="btn btn-success">Sí, cambiar</button>
                 <button onclick="document.getElementById('msg_6').close();" class="btn btn-secondary">Cancelar</button>
