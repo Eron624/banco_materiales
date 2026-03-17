@@ -47,3 +47,27 @@ dialog .modal-content {
     max-width: 90vw;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+.estado-disponible {
+    background-color: #28a745 !important;
+    color: white;
+}
+
+.estado-no-disponible {
+    background-color: #dc3545 !important;
+    color: white;
+}
+
+.disponibilidad-btn {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+}
+
+.disponibilidad-btn:hover {
+    background-color: #0b5ed7;
+    color: white;
+}
+
+.me-1 {
+    margin-right: 0.25rem !important;
+}

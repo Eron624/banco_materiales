@@ -15,25 +15,25 @@ if (is_null($conn)) {
 } else {
     try {
         $idPubli = $datos_request['idPubli'];
+        $disponibilidad = $datos_request['disponibilidad'];
 
-        $conn->exec("SET SQL_SAFE_UPDATES = 0");
-
-        $qry_eliminar = "DELETE FROM comentarios WHERE idPubli = :idPubli";
-        $stmt = $conn->prepare($qry_eliminar);
-        $stmt->bindParam(':idPubli', $idPubli);
+        $qry_disponibilidad = "UPDATE publicaciones SET disponibilidad = :disponibilidad WHERE idPubli = :idPubli";
+        $stmt = $conn->prepare($qry_disponibilidad);
+        $stmt->bindParam(':idPubli', $idPubli, PDO::PARAM_INT);
+        $stmt->bindParam(':disponibilidad', $disponibilidad, PDO::PARAM_INT);
         $stmt->execute();
 
-        $conn->exec("SET SQL_SAFE_UPDATES = 1");
-
         $error = 0;
-        $mensaje = "LOS COMENTARIOS SE ELIMINARON CON ÉXITO";
-    } catch (PDOException $e) {
+        $mensaje = "MODIFICACIÓN CON ÉXITO";
+    }catch(PDOException $e)
+    {
         $error = 1;
-        $mensaje = "ENTRO AL CATCH";
+        $mensaje = "ENTRO AL CATCH: " . $e->getMessage();
     }
 
     $datos['error'] = $error;
     $datos['mensaje'] = $mensaje;
 }
+
 echo json_encode($datos);
 ?>

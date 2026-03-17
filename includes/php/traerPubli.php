@@ -20,7 +20,7 @@ else
 {
     try
     {
-        $qry_publicaciones = "SELECT idPubli, titulo, descripcion, urlImage, fecha, usuario, nombre FROM publicaciones ORDER BY fecha DESC";
+        $qry_publicaciones = "SELECT idPubli, titulo, descripcion, urlImage, fecha, usuario, nombre, disponibilidad FROM publicaciones ORDER BY fecha DESC";
 
         $stmt = $conn->prepare($qry_publicaciones);
         $stmt->execute();

@@ -217,12 +217,15 @@ function generarPublicaciones(datos)
         let publi = document.createElement("div");
         publi.className = "card shadow-sm h-100";
 
+        let badgeClass = item.disponibilidad == 1 ? "estado-disponible" : "estado-no-disponible";
+        let badgeText = item.disponibilidad == 1 ? "Disponible" : "No disponible";
+
         publi.innerHTML = `
         <div class="tarjeta">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3" id="encabe${index}">
                     <h5 class="card-title h5 mb-0">${item.titulo}</h5>
-                    <span class="badge estado-disponible">Disponible</span>
+                    <span class="badge ${badgeClass}" id="badge${item.idPubli}">${badgeText}</span>
                 </div>
 
                 ${item.urlImage ? `
@@ -253,10 +256,13 @@ function generarPublicaciones(datos)
 
         let encabe = document.getElementById(`encabe${index}`);
 
-        if (item.usuario == usuario) {
+        /*if (item.usuario == usuario) {
             let divBtnErase = document.createElement("div");
 
-            divBtnErase.innerHTML = `<button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarPubli(${item.idPubli})">
+            divBtnErase.innerHTML = `<button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="disponiPubli(${item.idPubli})">
+                        Disponibilidad
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarPubli(${item.idPubli})">
                         Eliminar
                     </button>`;
 
@@ -264,6 +270,20 @@ function generarPublicaciones(datos)
         }
         else {
 
+        }*/
+        if (item.usuario == usuario) {
+            let divBtnErase = document.createElement("div");
+
+            let btnTexto = item.disponibilidad == 1 ? "Marcar como no disponible" : "Marcar como disponible";
+
+            divBtnErase.innerHTML = `<button class="btn btn-sm btn-primary disponibilidad-btn me-1" onclick="cambiarDisponibilidad(${item.idPubli}, ${item.disponibilidad})">
+                ${btnTexto}
+            </button>
+            <button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarPubli(${item.idPubli})">
+                Eliminar
+            </button>`;
+
+            encabe.appendChild(divBtnErase);
         }
 
         traerComentarios(item.idPubli);
@@ -560,4 +580,81 @@ function limpiarBusqueda() {
     document.getElementById('busqueda').value = '';
     document.getElementById('resultadoBusqueda').innerHTML = '';
     generarPublicaciones(todasLasPublicaciones);
+}
+
+function cambiarDisponibilidad(idPubli, disponibilidadActual) {
+    msg_6.showModal();
+    let msg_confirmar = document.getElementById("msg_confirmar_6");
+    let nuevoBoton = msg_confirmar.cloneNode(true);
+    msg_confirmar.parentNode.replaceChild(nuevoBoton, msg_confirmar);
+    msg_confirmar = nuevoBoton;
+
+    let nuevaDisponibilidad = disponibilidadActual == 1 ? 0 : 1;
+    let datos = {
+        idPubli: idPubli,
+        disponibilidad: nuevaDisponibilidad
+    };
+
+    msg_confirmar.addEventListener("click", () => {
+        msg_6.close();
+        let url = "../includes/php/cambiar_disponibilidad.php";
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(datos),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(respuesta => {
+                return respuesta.json();
+            })
+            .then(datos => {
+
+                let error = datos.error;
+                let mensaje = datos.mensaje;
+                if (error == 1) {
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'ERROR 1';
+                    msg_3.showModal();
+                }
+                else if (error == 100) {
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'ERROR EN LA CONEXION';
+                    msg_3.showModal();
+                }
+                else if (error == 0) {
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'DISPONIBILIDAD ACTUALIZADA';
+                    msg_3.showModal();
+
+                    actualizarBadgeDisponibilidad(idPubli, nuevaDisponibilidad);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    });
+}
+
+function actualizarBadgeDisponibilidad(idPubli, nuevaDisponibilidad) {
+    let badge = document.getElementById(`badge${idPubli}`);
+    if (badge) {
+        if (nuevaDisponibilidad == 1) {
+            badge.className = "badge estado-disponible";
+            badge.textContent = "Disponible";
+        } else {
+            badge.className = "badge estado-no-disponible";
+            badge.textContent = "No disponible";
+        }
+    }
+
+    let botones = document.querySelectorAll('.disponibilidad-btn');
+    botones.forEach(boton => {
+        let onclickAttr = boton.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`cambiarDisponibilidad(${idPubli},`)) {
+            let nuevoTexto = nuevaDisponibilidad == 1 ? "Marcar como no disponible" : "Marcar como disponible";
+            boton.textContent = nuevoTexto;
+            boton.setAttribute('onclick', `cambiarDisponibilidad(${idPubli}, ${nuevaDisponibilidad})`);
+        }
+    });
 }
