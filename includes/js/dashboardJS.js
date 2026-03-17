@@ -37,10 +37,7 @@ function logout() {
         let urlCS = "../includes/php/cerrar_session.php";
         fetch(urlCS)
             .then(respuesta => {
-                //return respuesta.text();
-                //console.log(respuesta);
                 return respuesta.json();
-                //return respuesta.text();
             })
             .then(datos => {
                 window.location.href = "../index.html";
@@ -85,7 +82,6 @@ async function agregarPublicacion(event) {
             // Intentar subir la imagen solo si hay un archivo seleccionado
             urlImage = await subirFoto();
         } else {
-            //console.log("No se seleccionó imagen, se guardará solo texto");
         }
 
         let datos = {
@@ -97,10 +93,7 @@ async function agregarPublicacion(event) {
             nombre: nombre
         };
 
-        //console.log("Enviando datos:", datos);
-
         let url = "../includes/php/subirPubli.php";
-
         fetch(url, {
             method: 'POST',
             body: JSON.stringify(datos),
@@ -110,8 +103,6 @@ async function agregarPublicacion(event) {
         })
             .then(respuesta => respuesta.json())
             .then(datos => {
-                //console.log(datos);
-
                 // Limpiar el formulario después de subir
                 document.getElementById("titulo").value = "";
                 document.getElementById("descripcion").value = "";
@@ -202,7 +193,6 @@ function traerPublicaciones()
         })
         .then(datos => {
             if (datos.error == 0) {
-                //console.log(datos.data);
                 generarPublicaciones(datos.data);
             }
             else {
@@ -239,13 +229,13 @@ function generarPublicaciones(datos)
                     <small class="texto-secundario">${item.nombre}</small>
                 </div>
                     
-                <h6 class="comentarios-titulo">Comentarios (0)</h6>
-                <ul class="lista-comentarios">
+                <h6 class="comentarios-titulo" id="cantidadComent${item.idPubli}"></h6>
+                <ul class="lista-comentarios" id="listaComent${item.idPubli}">
                 </ul>
                     
-                <form class="formulario-comentario">
+                <form class="formulario-comentario" onsubmit="event.preventDefault(); agregarComent();">
                     <div class="grupo-comentario">
-                        <input type="text" class="campo-comentario" placeholder="Escribe un comentario..." required>
+                        <input type="text" class="campo-comentario" placeholder="Escribe un comentario..." required maxlength="250">
                         <button class="boton boton-comentar" type="submit">Publicar</button>
                     </div>
                 </form>
@@ -267,11 +257,60 @@ function generarPublicaciones(datos)
         else {
 
         }
+
+        traerComentarios(item.idPubli);
+    });
+}
+
+function traerComentarios(idPubli) {
+    idPubli = Number(idPubli);
+    let datos = { idPubli: idPubli };
+    let url = "../includes/php/traerComentarios.php";
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(datos),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            if (datos.error == 0) {
+                generarComentarios(datos.data, idPubli);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+function generarComentarios(datos, idPubli) {
+    let cantidadComent = document.getElementById(`cantidadComent${idPubli}`);
+
+    cantidadComent.textContent = `Comentarios (${datos.length})`;
+
+    datos.forEach((item, index) => {
+        let listaComent = document.getElementById(`listaComent${item.idPubli}`);
+
+        let li = document.createElement("div");
+        /*li.innerHTML = `
+        <li class="comentario"><strong>${item.primer_nombre} ${item.apell_pat}:</strong> ${item.contenido} ${item.fecha_coment}</li>
+        `;*/
+        li.innerHTML = `
+        <li class="comentario">
+            <div class="d-flex justify-content-between align-items-center">
+                <strong>${item.primer_nombre} ${item.apell_pat}:</strong>
+                <span class="small text-secondary">${item.fecha_coment}</span>
+            </div>
+            <div>${item.contenido}</div>
+        </li>
+        `;
+
+        listaComent.appendChild(li);
     });
 }
 
 function eliminarPubli(idPubli) {
-    //console.log(idPubli);
     msg_4.showModal();
     let msg_eliminar = document.getElementById("msg_eliminar");
     let nuevoBoton = msg_eliminar.cloneNode(true);
@@ -291,7 +330,6 @@ function eliminarPubli(idPubli) {
         })
             .then(respuesta => respuesta.json())
             .then(datos => {
-                //console.log(datos);
                 let error = datos.error;
                 let mensaje = datos.mensaje;
                 if (error == 1) {
@@ -316,4 +354,8 @@ function eliminarPubli(idPubli) {
                 console.log(error);
             });
     });
+}
+
+function agregarComent() {
+    console.log();
 }

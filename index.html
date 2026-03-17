@@ -12,8 +12,7 @@
     <header>
         <div class="encabezado">
             <img id="logo1" src="./includes/multimedia/logoTec.jpg" alt="Tecnológico Nacional de México" title="TEC NM">
-            <img id="logo2" src="./includes/multimedia/logoTec2.jpg" alt="Instituto Tecnológico de Chihuahua 2"
-                title="ITCH 2">
+            <img id="logo2" src="./includes/multimedia/logoTec2.jpg" alt="Instituto Tecnológico de Chihuahua 2" title="ITCH 2">
         </div>
     </header>
 
@@ -41,6 +40,11 @@
         </form>
     </div>
 <script src="./includes/js/indexJS.js" defer></script>
+<dialog id='msg'>
+    <h2 id='msg_titulo'></h2>
+    <p id='msg_cuerpo'></p>
+    <button id='msg_cerrar' class="boton msg_boton" onclick="msg.close();">CERRAR</button>
+</dialog>
 <dialog id="msg_2">
     <h2 id='msg_titulo_2'></h2>
     <p id='msg_cuerpo_2'></p>
@@ -56,8 +60,13 @@
 
     <form class="formulario-registro" onsubmit="event.preventDefault(); registroNuevo();" id="formRegis">
         <div class="campo">
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" name="correo" required pattern=".*@chihuahua2\.tecnm\.mx$"
+                title="El correo debe terminar en @chihuahua2.tecnm.mx" oninput="ponerNumControl()">
+            </div>
+            <div class="campo">
             <label for="user">Número de Control</label>
-            <input type="text" id="user" name="user" required>
+            <input type="text" id="user" name="user" readonly>
         </div>
 
         <div class="campo">
@@ -85,11 +94,6 @@
                 <label for="apell_mat">Apellido Materno</label>
                 <input type="text" id="apell_mat" name="apell_mat">
             </div>
-        </div>
-
-        <div class="campo">
-            <label for="correo">Correo</label>
-            <input type="email" id="correo" name="correo" required>
         </div>
 
         <div class="campo">
