@@ -210,33 +210,40 @@ function generarPublicaciones(datos)
     publicaciones.innerHTML = ``;
     datos.forEach((item, index) =>
     {
+        let col = document.createElement("div");
+        col.className = "col-12";
+
         let publi = document.createElement("div");
+        publi.className = "card shadow-sm h-100";
 
         publi.innerHTML = `
         <div class="tarjeta">
-            <div class="tarjeta-contenido">
-                <div class="publicacion-encabezado" id="encabe${index}">
-                    <h5 class="publicacion-titulo">${item.titulo}</h5>
-                    <span class="estado estado-disponible">Disponible</span>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3" id="encabe${index}">
+                    <h5 class="card-title h5 mb-0">${item.titulo}</h5>
+                    <span class="badge estado-disponible">Disponible</span>
                 </div>
-                <div class="text-center">
-                    <img src="${item.urlImage}" alt="" class"img-fluid rounded mx-auto d-block">
+
+                ${item.urlImage ? `
+                <div class="text-center mb-3">
+                    <img src="${item.urlImage}" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;" alt="${item.titulo}">
                 </div>
-                <p class="publicacion-descripcion">${item.descripcion}</p>
+                ` : ''}
+                <p class="card-text text-secondary">${item.descripcion}</p>
                     
-                <div class="publicacion-metadata">
-                    <small class="texto-secundario">Publicado ${item.fecha}</small><br>
-                    <small class="texto-secundario">${item.nombre}</small>
+                <div class="text-secondary small mb-3">
+                    <div>Publicado ${item.fecha}</div>
+                    <div class="fw-semibold">${item.nombre}</div>
                 </div>
                     
-                <h6 class="comentarios-titulo" id="cantidadComent${item.idPubli}"></h6>
-                <ul class="lista-comentarios" id="listaComent${item.idPubli}">
+                <h6 class="text-success fw-semibold mt-3 mb-2" id="cantidadComent${item.idPubli}"></h6>
+                <ul class="list-unstyled" id="listaComent${item.idPubli}">
                 </ul>
                     
-                <form class="formulario-comentario" id="formComent${item.idPubli}" onsubmit="event.preventDefault(); agregarComent(${item.idPubli});">
-                    <div class="grupo-comentario">
-                        <input type="text" class="campo-comentario" id="coment${item.idPubli}" placeholder="Escribe un comentario..." required maxlength="250">
-                        <button class="boton boton-comentar" type="submit">Publicar</button>
+                <form class="mt-3" id="formComent${item.idPubli}" onsubmit="event.preventDefault(); agregarComent(${item.idPubli});">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="coment${item.idPubli}" placeholder="Escribe un comentario..." required maxlength="250">
+                        <button class="btn btn-secondary" type="submit">Publicar</button>
                     </div>
                 </form>
             </div>
@@ -290,16 +297,21 @@ function generarComentarios(datos, idPubli) {
     cantidadComent.textContent = `Comentarios (${datos.length})`;
 
     let listaComent = document.getElementById(`listaComent${idPubli}`);
+    listaComent.innerHTML = '';
 
     datos.forEach((item, index) => {
         let li = document.createElement("li");
-        li.className = "comentario";
+        li.className = "comentario mb-2";
         li.innerHTML = `
             <div class="d-flex justify-content-between align-items-center" id="divComent${item.idComent}">
-                <strong>${item.primer_nombre} ${item.apell_pat}:</strong>
-                <span class="small text-secondary">${item.fecha_coment}</span>
+                <div class="flex-gow-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong>${item.primer_nombre} ${item.apell_pat}:</strong>
+                        <span class="small text-secondary">${item.fecha_coment}</span>
+                    </div>
+                    <div class="mt-1">${item.contenido}</div>
+                </div>
             </div>
-            <div>${item.contenido}</div>
         `;
         listaComent.appendChild(li);
 
@@ -406,6 +418,7 @@ function eliminarPubli(idPubli) {
                     msg_titulo_3.innerHTML = 'ELIMINADA CORRECTAMENTE';
                     msg_3.showModal();
 
+                    eliminarComentariosPubli(idPubli);
                     traerPublicaciones();
                 }
             })
@@ -454,6 +467,38 @@ function agregarComent(idPubli) {
                 document.getElementById(`formComent${idPubli}`).reset();
                 document.getElementById(`listaComent${idPubli}`).innerHTML = ``;
                 traerComentarios(idPubli);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+function eliminarComentariosPubli(idPubli) {
+    idPubli = Number(idPubli);
+    let datos = { idPubli: idPubli };
+    let url = "../includes/php/eliminar_ComentPubli.php";
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(datos),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            if (datos.error == 0) {
+
+            }
+            else if (datos.error == 100) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR EN LA CONEXION';
+                msg_3.showModal();
+            }
+            else if (datos.error == 1) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR 1';
+                msg_3.showModal();
             }
         })
         .catch(error => {
