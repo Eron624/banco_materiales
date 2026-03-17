@@ -233,9 +233,9 @@ function generarPublicaciones(datos)
                 <ul class="lista-comentarios" id="listaComent${item.idPubli}">
                 </ul>
                     
-                <form class="formulario-comentario" onsubmit="event.preventDefault(); agregarComent();">
+                <form class="formulario-comentario" id="formComent${item.idPubli}" onsubmit="event.preventDefault(); agregarComent(${item.idPubli});">
                     <div class="grupo-comentario">
-                        <input type="text" class="campo-comentario" placeholder="Escribe un comentario..." required maxlength="250">
+                        <input type="text" class="campo-comentario" id="coment${item.idPubli}" placeholder="Escribe un comentario..." required maxlength="250">
                         <button class="boton boton-comentar" type="submit">Publicar</button>
                     </div>
                 </form>
@@ -289,24 +289,82 @@ function generarComentarios(datos, idPubli) {
 
     cantidadComent.textContent = `Comentarios (${datos.length})`;
 
-    datos.forEach((item, index) => {
-        let listaComent = document.getElementById(`listaComent${item.idPubli}`);
+    let listaComent = document.getElementById(`listaComent${idPubli}`);
 
-        let li = document.createElement("div");
-        /*li.innerHTML = `
-        <li class="comentario"><strong>${item.primer_nombre} ${item.apell_pat}:</strong> ${item.contenido} ${item.fecha_coment}</li>
-        `;*/
+    datos.forEach((item, index) => {
+        let li = document.createElement("li");
+        li.className = "comentario";
         li.innerHTML = `
-        <li class="comentario">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center" id="divComent${item.idComent}">
                 <strong>${item.primer_nombre} ${item.apell_pat}:</strong>
                 <span class="small text-secondary">${item.fecha_coment}</span>
             </div>
             <div>${item.contenido}</div>
-        </li>
         `;
-
         listaComent.appendChild(li);
+
+        let divComent = document.getElementById(`divComent${item.idComent}`);
+
+        if (item.usuario == usuario) {
+            let divBtnEraseComent = document.createElement("div");
+
+            divBtnEraseComent.innerHTML = `<button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarComentario(${item.idComent}, ${idPubli})">
+                        Eliminar
+                    </button>`;
+
+            divComent.appendChild(divBtnEraseComent);
+        }
+        else {
+
+        }
+    });
+}
+
+function eliminarComentario(idComent, idPubli) {
+    msg_5.showModal();
+    let msg_eliminar = document.getElementById("msg_eliminar_5");
+    let nuevoBoton = msg_eliminar.cloneNode(true);
+    msg_eliminar.parentNode.replaceChild(nuevoBoton, msg_eliminar);
+    msg_eliminar = nuevoBoton;
+
+    let datos = { idComent: idComent };
+    msg_eliminar.addEventListener("click", () => {
+        msg_5.close();
+        let url = "../includes/php/eliminar_comentario.php";
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(datos),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                let error = datos.error;
+                let mensaje = datos.mensaje;
+                if (error == 1) {
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'ERROR 1';
+                    msg_3.showModal();
+                }
+                else if (error == 100) {
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'ERROR EN LA CONEXION';
+                    msg_3.showModal();
+                }
+                else if (error == 0) {
+                    right = 1;
+                    msg_cuerpo_3.innerHTML = mensaje;
+                    msg_titulo_3.innerHTML = 'ELIMINADO CORRECTAMENTE';
+                    msg_3.showModal();
+
+                    document.getElementById(`listaComent${idPubli}`).innerHTML = ``;
+                    traerComentarios(idPubli);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
     });
 }
 
@@ -347,6 +405,7 @@ function eliminarPubli(idPubli) {
                     msg_cuerpo_3.innerHTML = mensaje;
                     msg_titulo_3.innerHTML = 'ELIMINADA CORRECTAMENTE';
                     msg_3.showModal();
+
                     traerPublicaciones();
                 }
             })
@@ -356,6 +415,48 @@ function eliminarPubli(idPubli) {
     });
 }
 
-function agregarComent() {
-    console.log();
+function agregarComent(idPubli) {
+    let contenido = document.getElementById(`coment${idPubli}`).value;
+
+    let datos = {
+        contenido: contenido,
+        usuario: usuario,
+        idPubli: idPubli,
+        fecha_coment: formatearFechaISO()
+    };
+    let url = "../includes/php/subirComent.php";
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(datos),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            let error = datos.error;
+            let mensaje = datos.mensaje;
+            if (error == 1) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR 1';
+                msg_3.showModal();
+            }
+            else if (error == 100) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR EN LA CONEXION';
+                msg_3.showModal();
+            }
+            else if (error == 0) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'REGISTRADO CORRECTAMENTE';
+                //msg_3.showModal();
+
+                document.getElementById(`formComent${idPubli}`).reset();
+                document.getElementById(`listaComent${idPubli}`).innerHTML = ``;
+                traerComentarios(idPubli);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
 }
