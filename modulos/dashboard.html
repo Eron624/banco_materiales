@@ -71,6 +71,27 @@
             </div>
         </div>
 
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form id="formBusqueda" onsubmit="event.preventDefault(); buscarMateriales();">
+                    <div class="d-flex flex-column flex-md-row gap-2">
+                        <div class="flex-grow-1">
+                            <input type="text" class="form-control form-control-lg" id="busqueda" name="busqueda"
+                                placeholder="Buscar materiales por título, descripción o autor..." style="border-radius: 10px;">
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-success btn-lg w-100"
+                                style="border-radius: 10px; min-width: 120px;">
+                                <i class="bi bi-search me-2"></i>
+                                Buscar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div id="resultadoBusqueda" class="mt-2 small text-muted"></div>
+            </div>
+        </div>
+
         <!-- PUBLICACIONES -->
         <div id="publicaciones" class="row g-4">
 

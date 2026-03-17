@@ -193,6 +193,7 @@ function traerPublicaciones()
         })
         .then(datos => {
             if (datos.error == 0) {
+                todasLasPublicaciones = datos.data;
                 generarPublicaciones(datos.data);
             }
             else {
@@ -504,4 +505,59 @@ function eliminarComentariosPubli(idPubli) {
         .catch(error => {
             console.log(error);
         });
+}
+
+let todasLasPublicaciones = [];
+
+function normalizarTexto(texto) {
+    return texto.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
+function buscarMateriales() {
+    let textoBusqueda = document.getElementById('busqueda').value.trim();
+    let textoNormalizado = normalizarTexto(textoBusqueda);
+    let divResultado = document.getElementById('resultadoBusqueda');
+
+    if (textoBusqueda === '') {
+        generarPublicaciones(todasLasPublicaciones);
+        divResultado.innerHTML = '';
+        return;
+    }
+
+    let resultados = todasLasPublicaciones.filter(publicacion => {
+        let tituloNorm = normalizarTexto(publicacion.titulo);
+        let descripcionNorm = normalizarTexto(publicacion.descripcion);
+        let nombreNorm = normalizarTexto(publicacion.nombre);
+
+        return tituloNorm.includes(textoNormalizado) ||
+            descripcionNorm.includes(textoNormalizado) ||
+            nombreNorm.includes(textoNormalizado);
+    });
+
+    if (resultados.length > 0) {
+        generarPublicaciones(resultados);
+        divResultado.innerHTML = `Se encontraron ${resultados.length} resultado(s) para "${textoBusqueda}"`;
+    } else {
+        let publicacionesDiv = document.getElementById('publicaciones');
+        publicacionesDiv.innerHTML = `
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="bi bi-search" style="font-size: 2.5rem; color: #ccc;"></i>
+                    <p class="mt-3 text-muted">No se encontraron materiales para "${textoBusqueda}"</p>
+                    <button class="btn btn-outline-success btn-sm mt-2" onclick="limpiarBusqueda()">
+                        Ver todos los materiales
+                    </button>
+                </div>
+            </div>
+        `;
+        divResultado.innerHTML = '';
+    }
+}
+
+function limpiarBusqueda() {
+    document.getElementById('busqueda').value = '';
+    document.getElementById('resultadoBusqueda').innerHTML = '';
+    generarPublicaciones(todasLasPublicaciones);
 }
