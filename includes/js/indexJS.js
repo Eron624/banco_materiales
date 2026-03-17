@@ -31,7 +31,6 @@ function verificarSesion() {
         })
         .catch(error => {
             console.log(error);
-            console.log(datos);
         });
 }
 
@@ -40,8 +39,6 @@ function login()
     let usuario = document.getElementById("usuario").value;
     usuario = extraerNum(usuario);
     let contrase = document.getElementById("contrase").value;
-    console.log(usuario);
-    console.log(contrase);
     let datos = {
         usuario: usuario,
         contrase: contrase
@@ -67,8 +64,6 @@ function login()
             // console.log(datos.mensaje);
             let error = datos.error;
             let mensaje = datos.mensaje;
-
-            console.log(error);
 
             if (error == 1) {
                 msg_cuerpo.innerHTML = mensaje;
@@ -121,7 +116,6 @@ function extraerNum(valor) {
     valor = valor.split('@')[0];
     let todosLosNumeros = valor.match(/\d+/);
     todosLosNumeros = parseInt(todosLosNumeros);
-    console.log(todosLosNumeros);
     return todosLosNumeros;
 }
 

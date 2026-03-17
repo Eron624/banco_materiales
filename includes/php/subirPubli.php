@@ -26,6 +26,8 @@ $datos['nombre'] = $nombre;
 $obj_conexion = new ConexionBD();
 $conn = $obj_conexion->getConexion();
 
+$disponibilidad = 1;
+
 if (is_null($conn)) {
     $error = 100;
     $mensaje = "ERROR REPORTARLO A LC20550585@chihuahua2.tecnm.mx";
@@ -34,7 +36,7 @@ else
 {
     try
     {
-        $qry_subir_publicacion = "INSERT INTO publicaciones(titulo, descripcion, urlImage, fecha, usuario, nombre) VALUES (:titulo, :descripcion, :urlImage, :fecha, :usuario, :nombre)";
+        $qry_subir_publicacion = "INSERT INTO publicaciones(titulo, descripcion, urlImage, fecha, usuario, nombre, disponibilidad) VALUES (:titulo, :descripcion, :urlImage, :fecha, :usuario, :nombre, :disponibilidad)";
 
         $stmt = $conn->prepare($qry_subir_publicacion);
         $stmt->bindParam(':titulo', $titulo);
@@ -43,6 +45,7 @@ else
         $stmt->bindParam(':fecha', $fecha);
         $stmt->bindParam(':usuario', $usuario);
         $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':disponibilidad', $disponibilidad);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
 

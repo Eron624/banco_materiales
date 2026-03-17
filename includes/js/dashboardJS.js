@@ -76,10 +76,9 @@ async function agregarPublicacion(event) {
     try {
         let urlImage = "";
 
-        // Verificar si se seleccionó una imagen
         const imagenInput = document.getElementById("imagen");
         if (imagenInput.files.length > 0) {
-            // Intentar subir la imagen solo si hay un archivo seleccionado
+
             urlImage = await subirFoto();
         } else {
         }
@@ -87,7 +86,7 @@ async function agregarPublicacion(event) {
         let datos = {
             titulo: titulo,
             descripcion: descripcion,
-            urlImage: urlImage, // Puede ser string vacío si no hay imagen
+            urlImage: urlImage,
             fecha: formatearFechaISO(),
             usuario: usuario,
             nombre: nombre
@@ -103,19 +102,14 @@ async function agregarPublicacion(event) {
         })
             .then(respuesta => respuesta.json())
             .then(datos => {
-                // Limpiar el formulario después de subir
                 document.getElementById("titulo").value = "";
                 document.getElementById("descripcion").value = "";
                 document.getElementById("imagen").value = "";
 
-                // Quitar la vista previa si existe
                 const preview = document.getElementById("preview");
                 if (preview) {
                     preview.remove();
                 }
-
-                // Mostrar mensaje de éxito
-                //alert("Publicación agregada exitosamente");
                 traerPublicaciones();
             })
             .catch(error => {
@@ -189,7 +183,6 @@ function traerPublicaciones()
     fetch(url)
         .then(respuesta => {
             return respuesta.json();
-            //return respuesta.text();
         })
         .then(datos => {
             if (datos.error == 0) {
@@ -256,21 +249,6 @@ function generarPublicaciones(datos)
 
         let encabe = document.getElementById(`encabe${index}`);
 
-        /*if (item.usuario == usuario) {
-            let divBtnErase = document.createElement("div");
-
-            divBtnErase.innerHTML = `<button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="disponiPubli(${item.idPubli})">
-                        Disponibilidad
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarPubli(${item.idPubli})">
-                        Eliminar
-                    </button>`;
-
-            encabe.appendChild(divBtnErase);
-        }
-        else {
-
-        }*/
         if (item.usuario == usuario) {
             let divBtnErase = document.createElement("div");
 
