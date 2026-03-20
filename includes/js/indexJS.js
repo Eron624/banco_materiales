@@ -6,13 +6,9 @@ function verificarSesion() {
     let cone = "./includes/php/verifIndex.php";
     fetch(cone)
         .then(respuesta => {
-            //return respuesta.text();
-            //console.log(respuesta);
             return respuesta.json();
-            //return respuesta.text();
         })
         .then(datos => {
-            //console.log(datos);
             let error = datos.error;
             let mensaje = datos.mensaje;
 

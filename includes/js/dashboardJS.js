@@ -1,3 +1,11 @@
+let usuario;
+let nombre;
+let tipo_usr;
+let paginaActual = 1;
+let cargando = false;
+let hayMasPublicaciones = true;
+let paginaComentarios = {};
+
 window.addEventListener("load", () => {
     security();
     cargarMasPublicaciones();
@@ -10,12 +18,16 @@ window.addEventListener("load", () => {
     });
 });
 
-let usuario;
-let nombre;
-let paginaActual = 1;
-let cargando = false;
-let hayMasPublicaciones = true;
-let paginaComentarios = {};
+function adminFunciones() {
+    let ulNav = document.getElementById("ulNav");
+
+    let li = document.createElement("li");
+    li.className = "nav-item";
+
+    li.innerHTML = `<a class="nav-link text-white" href="admin.html" id="admin-link">ADMINISTRAR</a>`;
+
+    ulNav.appendChild(li);
+}
 
 function datosUsuario(nombre, usuario)
 {
@@ -34,7 +46,6 @@ function security() {
     fetch(url)
         .then(respuesta => {
             return respuesta.json();
-            //return respuesta.text();
         })
         .then(datos => {
             if (datos.error == 1) {
@@ -43,8 +54,15 @@ function security() {
             else {
                 usuario = datos.usuario;
                 nombre = datos.nombre;
+                tipo_usr = datos.tipo_usr;
 
                 datosUsuario(nombre, usuario);
+
+                if (tipo_usr == 1) {
+                    adminFunciones();
+                }
+                else {
+                }
             }
         })
         .catch(error => {
@@ -267,7 +285,7 @@ function generarPublicaciones(datos, reiniciarPaginacion = false) {
 
         let encabe = document.getElementById(`encabe${item.idPubli}`);
 
-        if (item.usuario == usuario) {
+        if (item.usuario == usuario || tipo_usr == 1) {
             let divBtnErase = document.createElement("div");
 
             let btnTexto = item.disponibilidad == 1 ? "Marcar como no disponible" : "Marcar como disponible";
@@ -317,7 +335,7 @@ function generarComentarios(datos, idPubli) {
 
         let divComent = document.getElementById(`divComent${item.idComent}`);
 
-        if (item.usuario == usuario) {
+        if (item.usuario == usuario || tipo_usr == 1) {
             let divBtnEraseComent = document.createElement("div");
 
             divBtnEraseComent.innerHTML = `<button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarComentario(${item.idComent}, ${idPubli})">
@@ -733,7 +751,7 @@ function cargarMasComentarios(idPubli) {
                         `;
                         listaComent.appendChild(li);
 
-                        if (item.usuario == usuario) {
+                        if (item.usuario == usuario || tipo_usr == 1) {
                             let divComent = document.getElementById(`divComent${item.idComent}`);
                             let divBtnEraseComent = document.createElement("div");
                             divBtnEraseComent.innerHTML = `<button class="btn btn-sm btn-outline-danger eliminar-btn" onclick="eliminarComentario(${item.idComent}, ${idPubli})">

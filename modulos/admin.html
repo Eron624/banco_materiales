@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Banco de Materiales</title>
+    <title>Administración</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- CSS Personalizados -->
     <link rel="stylesheet" href="../includes/css/dashboard.css">
@@ -19,7 +20,8 @@
     <!-- Encabezado -->
     <header class="bg-white shadow-sm">
         <div class="container">
-            <div class="d-flex flex-wrap justify-content-center justify-content-md-between align-items-center gap-3 py-3">
+            <div
+                class="d-flex flex-wrap justify-content-center justify-content-md-between align-items-center gap-3 py-3">
                 <img id="logo1" src="../includes/multimedia/logoTec.jpg" class="img-fluid rounded"
                     style="max-width: 200px; max-height: 80px;" alt="Tecnológico Nacional de México" title="TEC NM">
                 <img id="logo2" src="../includes/multimedia/logoTec2.jpg" class="img-fluid rounded"
@@ -40,47 +42,34 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" href="dashboard.html" id="inicio-link">INICIO</a>
                         </li>
+                        <li>
+                            <a class="nav-link text-white" href="#" id="admin-link">ADMINISTRAR</a>
+                        </li>
                     </ul>
                     <div id="divCuenta" class="d-flex">
                     </div>
                     <div class="d-flex">
-                        <div id="cerrarSesion" class="text-white px-3 py-2 rounded" style="cursor: pointer;" onclick="logout()">
+                        <div id="cerrarSesion" class="text-white px-3 py-2 rounded" style="cursor: pointer;"
+                            onclick="logout()">
                             <h4 class="m-0 fs-6">CERRAR SESIÓN</h4>
                         </div>
                     </div>
                 </div>
-                </div>
-                </nav>
+            </div>
+        </nav>
     </header>
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="container py-4">
-        <h2 class="text-center text-dark mb-4 fw-semibold">Banco de Materiales</h2>
-
-        <!-- FORMULARIO DE PUBLICACIÓN -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h4 class="card-title text-success mb-3">Nueva publicación</h4>
-                <form id="formPublicacion" onsubmit="event.preventDefault(); agregarPublicacion(event);">
-                    <input class="form-control mb-2" type="text" placeholder="Título del material" id="titulo" required maxlength="100">
-                    <textarea class="form-control mb-2" placeholder="Descripción del material" id="descripcion" rows="3" required
-                        maxlength="250"></textarea>
-                    <input class="form-control mb-3" type="file" id="imagen" accept="image/*">
-                    <button type="submit" class="btn btn-success w-100">
-                        Publicar
-                    </button>
-                </form>
-            </div>
-        </div>
+        <h2 class="text-center text-dark mb-4 fw-semibold">Banco de Materiales - Administración</h2>
 
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <form id="formBusqueda" onsubmit="event.preventDefault(); buscarMateriales();">
+                <form id="formBusqueda" onsubmit="event.preventDefault(); buscarUsuario();">
                     <div class="d-flex flex-column flex-md-row gap-2">
                         <div class="flex-grow-1">
                             <input type="text" class="form-control form-control-lg" id="busqueda" name="busqueda"
-                                placeholder="Buscar materiales por título, descripción o autor..."
-                                style="border-radius: 10px;">
+                                placeholder="Buscar Número de Control, Nombre, Apellido..." style="border-radius: 10px;">
                         </div>
                         <div>
                             <button type="submit" class="btn btn-success btn-lg w-100"
@@ -95,8 +84,7 @@
             </div>
         </div>
 
-        <!-- PUBLICACIONES -->
-        <div id="publicaciones" class="row g-4">
+        <div id="contenido" class="row g-4">
 
         </div>
     </main>
@@ -121,7 +109,7 @@
             </div>
         </div>
     </dialog>
-    <dialog id='msg_4' class="p-0 border-0 rounded-3 shadow-lg">
+    <!-- <dialog id='msg_4' class="p-0 border-0 rounded-3 shadow-lg">
         <div class="modal-content p-4" style="min-width: 300px;">
             <h2 id='msg_titulo_4' class="h4 mb-3 text-danger">¿SEGURO DE ELIMINAR?</h2>
             <p id='msg_cuerpo_4' class="mb-4">ESTA ACCIÓN ES IRREVERSIBLE Y SE PERDERÁ LA INFORMACIÓN PARA SIEMPRE</p>
@@ -151,10 +139,11 @@
                 <button onclick="document.getElementById('msg_6').close();" class="btn btn-secondary">Cancelar</button>
             </div>
         </div>
-    </dialog>
+    </dialog> -->
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../includes/js/dashboardJS.js"></script>
+    <script src="../includes/js/adminJS.js"></script>
 </body>
+
 </html>

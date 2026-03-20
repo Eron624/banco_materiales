@@ -47,21 +47,34 @@
         </form>
     </div>
 <script src="./includes/js/indexJS.js" defer></script>
-<dialog id='msg'>
-    <h2 id='msg_titulo'></h2>
-    <p id='msg_cuerpo'></p>
-    <button id='msg_cerrar' class="boton msg_boton" onclick="msg.close();">CERRAR</button>
+<dialog id='msg' class="p-0 border-0 rounded-3 shadow-lg">
+    <div class="modal-content p-4" style="min-width: 300px;">
+        <h2 id='msg_titulo' class="h4 mb-3"></h2>
+        <p id='msg_cuerpo' class="mb-4"></p>
+        <div class="d-flex gap-2 justify-content-end">
+            <button id="msg_cerrar" class="btn btn-secondary" onclick="msg.close();">CERRAR</button>
+        </div>
+    </div>
 </dialog>
-<dialog id="msg_2">
-    <h2 id='msg_titulo_2'></h2>
-    <p id='msg_cuerpo_2'></p>
-    <button id='msg_cerrar_2' class="boton msg_boton" onclick="msg_2.close();"">CERRAR</button>
+<dialog id='msg_2' class="p-0 border-0 rounded-3 shadow-lg">
+    <div class="modal-content p-4" style="min-width: 300px;">
+        <h2 id='msg_titulo_2' class="h4 mb-3"></h2>
+        <p id='msg_cuerpo_2' class="mb-4"></p>
+        <div class="d-flex gap-2 justify-content-end">
+            <button id="msg_cerrar_2" class="btn btn-secondary" onclick="msg_2.close();">CERRAR</button>
+        </div>
+    </div>
 </dialog>
-<dialog id='msg_3'>
-    <h2 id='msg_titulo_3'></h2>
-    <p id='msg_cuerpo_3'></p>
-    <button id='msg_cerrar_3' class=" boton msg_boton" onclick="msg_3.close();">CERRAR</button>
+<dialog id='msg_3' class="p-0 border-0 rounded-3 shadow-lg">
+    <div class="modal-content p-4" style="min-width: 300px;">
+        <h2 id='msg_titulo_3' class="h4 mb-3"></h2>
+        <p id='msg_cuerpo_3' class="mb-4"></p>
+        <div class="d-flex gap-2 justify-content-end">
+            <button id="msg_cerrar_3" class="btn btn-secondary" onclick="msg_3.close();">CERRAR</button>
+        </div>
+    </div>
 </dialog>
+
 <dialog id='dialogRegistro'>
     <h2>REGISTRAR NUEVO ESTUDIANTE</h2>
 

@@ -128,3 +128,22 @@ button:hover {
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
+dialog {
+    margin: auto;
+    border: none;
+    padding: 0;
+    background: transparent;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+dialog .modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 300px;
+    max-width: 90vw;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

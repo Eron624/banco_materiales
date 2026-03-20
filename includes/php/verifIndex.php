@@ -12,6 +12,7 @@ if (yaTieneSesionActiva())
     $usuarioLog = obtenerDatosUsuario();
     $datos['nombre'] = $usuarioLog['nombre'];
     $datos['usuario'] = $usuarioLog['usuario'];
+    $datos['tipo_usr'] = $usuarioLog['tipo_usr'];
 
     echo json_encode($datos);
 }

@@ -24,7 +24,8 @@ function obtenerDatosUsuario()
 {
         return [
             'nombre' => $_SESSION["nombre"] ?? null,
-            'usuario' => $_SESSION["usuario"] ?? null
+        'usuario' => $_SESSION["usuario"] ?? null,
+        'tipo_usr' => $_SESSION["tipo_usr"] ?? null
         ];
 }
 ?>

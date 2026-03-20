@@ -31,10 +31,11 @@ else
         $celular = $datos_request['celular'];
         $ctrl_intentos = 0;
         $flag = 1;
+        $tipo_usr = 0;
 
         $qry_registro = "INSERT INTO usuario 
-            (usuario, contrase, primer_nombre, segundo_nombre, apell_pat, apell_mat, correo, celular, ctrl_intentos, flag) 
-            VALUES (:usuario, :contrase, :primer_nombre, :segundo_nombre, :apell_pat, :apell_mat, :correo, :celular, :ctrl_intentos, :flag)";
+            (usuario, contrase, primer_nombre, segundo_nombre, apell_pat, apell_mat, correo, celular, ctrl_intentos, flag, tipo_usr) 
+            VALUES (:usuario, :contrase, :primer_nombre, :segundo_nombre, :apell_pat, :apell_mat, :correo, :celular, :ctrl_intentos, :flag, :tipo_usr)";
 
         $stmt = $conn->prepare($qry_registro);
         $stmt->bindParam(':usuario', $usuario);
@@ -47,6 +48,7 @@ else
         $stmt->bindParam(':celular', $celular);
         $stmt->bindParam(':ctrl_intentos', $ctrl_intentos);
         $stmt->bindParam(':flag', $flag);
+        $stmt->bindParam(':tipo_usr', $tipo_usr);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
 

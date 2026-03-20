@@ -23,11 +23,10 @@ else
 {
     try
     {
-        $qry_ingresar = "SELECT usuario, contrase, primer_nombre, apell_pat, flag, ctrl_intentos FROM usuario WHERE usuario = :usuario";// and contrase = :contrase";
+        $qry_ingresar = "SELECT usuario, contrase, primer_nombre, apell_pat, flag, ctrl_intentos, tipo_usr FROM usuario WHERE usuario = :usuario"; // and contrase = :contrase";
 
         $stmt = $conn->prepare($qry_ingresar);
         $stmt->bindParam(':usuario', $usuario);
-        //$stmt->bindParam(':contrase', $contrase);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $registro = $stmt->fetch();
@@ -41,21 +40,21 @@ else
                 $intentos = $registro['ctrl_intentos'];
                 if ($intentos > 5)
                 {
-                    $qry_desactivar_usuario = "UPDATE usuario set flag = 0 where $usuario = :usuario";
+                    $qry_desactivar_usuario = "UPDATE usuario SET flag = 0 WHERE usuario = :usuario";
                     $stmt = $conn->prepare($qry_desactivar_usuario);
                     $stmt->bindParam(':usuario', $usuario);
                     $stmt->execute();
 
                     //ERROR {TU CUENTA HA SIDO BLOQUEADA}
                     $error = 2;
-                    $mensaje = "ERROR EN LA CUENTA";
+                    $mensaje = "ERROR EN LA CUENTA - ENVIAR CORREO A: LC20550585@@chihuahua2.tecnm.mx";
                 }
                 else
                 {
                     if($registro['contrase'] == $contrase)
                     {
                         //REINICIAR INTENTOS
-                        $qry_reiniciar_intentos = "UPDATE usuario SET ctrl_intentos = 0 WHERE $usuario = :usuario";
+                        $qry_reiniciar_intentos = "UPDATE usuario SET ctrl_intentos = 0 WHERE usuario = :usuario";
                         $stmt = $conn->prepare($qry_reiniciar_intentos);
                         $stmt->bindParam(':usuario', $usuario);
                         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -66,6 +65,7 @@ else
                         $_SESSION["autentificado"] = "MUY_BIEN";
                         $_SESSION["nombre"]        = $nombre;
                         $_SESSION["usuario"] = $registro['usuario'];
+                        $_SESSION["tipo_usr"] = $registro['tipo_usr'];
 
                         $datos['nombre'] = $nombre;
 
@@ -75,7 +75,7 @@ else
                     else
                     {
                         $intentos++;
-                        $qry_incrementar_intentos = "UPDATE usuario set ctrl_intentos = $intentos where $usuario = :usuario";
+                        $qry_incrementar_intentos = "UPDATE usuario set ctrl_intentos = $intentos where usuario = :usuario";
                         $stmt = $conn->prepare($qry_incrementar_intentos);
                         $stmt->bindParam(':usuario', $usuario);
                         $stmt->execute();
@@ -90,7 +90,7 @@ else
             {
                 //ERROR {TU CUENTA HA SIDO BLOQUEADA}
                 $error = 2;
-                $mensaje = "ERROR EN LA CUENTA";
+                $mensaje = "ERROR EN LA CUENTA - ENVIAR CORREO A: LC20550585@@chihuahua2.tecnm.mx";
             }
         }
         else
