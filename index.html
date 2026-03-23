@@ -76,57 +76,59 @@
 </dialog>
 
 <dialog id='dialogRegistro'>
-    <h2>REGISTRAR NUEVO ESTUDIANTE</h2>
+    <div class="modal-content">
+        <h2>REGISTRAR NUEVO ESTUDIANTE</h2>
 
-    <form class="formulario-registro" onsubmit="event.preventDefault(); registroNuevo();" id="formRegis">
-        <div class="campo">
-            <label for="correo">Correo</label>
-            <input type="email" id="correo" name="correo" required pattern=".*@chihuahua2\.tecnm\.mx$"
-                title="El correo debe terminar en @chihuahua2.tecnm.mx" oninput="ponerNumControl()">
+        <form class="formulario-registro" onsubmit="event.preventDefault(); registroNuevo();" id="formRegis">
+            <div class="campo">
+                <label for="correo">Correo</label>
+                <input type="email" id="correo" name="correo" required pattern=".*@chihuahua2\.tecnm\.mx$"
+                    title="El correo debe terminar en @chihuahua2.tecnm.mx" oninput="ponerNumControl()">
             </div>
             <div class="campo">
-            <label for="user">Número de Control</label>
-            <input type="text" id="user" name="user" readonly placeholder="Generación Automática">
-        </div>
-
-        <div class="campo">
-            <label for="pass">Contraseña</label>
-            <input type="password" id="pass" name="pass" required>
-        </div>
-
-        <div class="campo-doble">
-            <div class="campo">
-                <label for="primer_nombre">Primer Nombre</label>
-                <input type="text" id="primer_nombre" name="primer_nombre" required>
+                <label for="user">Número de Control</label>
+                <input type="text" id="user" name="user" readonly placeholder="Generación Automática">
             </div>
-            <div class="campo">
-                <label for="segundo_nombre">Segundo Nombre</label>
-                <input type="text" id="segundo_nombre" name="segundo_nombre">
-            </div>
-        </div>
 
-        <div class="campo-doble">
             <div class="campo">
-                <label for="apell_pat">Apellido Paterno</label>
-                <input type="text" id="apell_pat" name="apell_pat" required>
+                <label for="pass">Contraseña</label>
+                <input type="password" id="pass" name="pass" required>
             </div>
+
+            <div class="campo-doble">
+                <div class="campo">
+                    <label for="primer_nombre">Primer Nombre</label>
+                    <input type="text" id="primer_nombre" name="primer_nombre" required>
+                </div>
+                <div class="campo">
+                    <label for="segundo_nombre">Segundo Nombre</label>
+                    <input type="text" id="segundo_nombre" name="segundo_nombre">
+                </div>
+            </div>
+
+            <div class="campo-doble">
+                <div class="campo">
+                    <label for="apell_pat">Apellido Paterno</label>
+                    <input type="text" id="apell_pat" name="apell_pat" required>
+                </div>
+                <div class="campo">
+                    <label for="apell_mat">Apellido Materno</label>
+                    <input type="text" id="apell_mat" name="apell_mat">
+                </div>
+            </div>
+
             <div class="campo">
-                <label for="apell_mat">Apellido Materno</label>
-                <input type="text" id="apell_mat" name="apell_mat">
+                <label for="celular">Celular</label>
+                <input type="text" id="celular" name="celular" required>
             </div>
-        </div>
 
-        <div class="campo">
-            <label for="celular">Celular</label>
-            <input type="text" id="celular" name="celular" required>
-        </div>
-
-        <div class="botones-registro">
-            <button type="button" id="btnCancelarRegistro" class="boton btn-cancelar"
-                onclick="dialogRegistro.close(); formRegis.reset();">CANCELAR</button>
-            <button type="submit" id="btnRegistrar" class="boton btn-registrar">REGISTRAR</button>
-        </div>
-    </form>
+            <div class="botones-registro">
+                <button type="button" id="btnCancelarRegistro" class="boton btn-cancelar"
+                    onclick="dialogRegistro.close(); formRegis.reset();">CANCELAR</button>
+                <button type="submit" id="btnRegistrar" class="boton btn-registrar">REGISTRAR</button>
+            </div>
+            </form>
+    </div>
 </dialog>
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

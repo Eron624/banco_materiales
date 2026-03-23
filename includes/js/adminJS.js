@@ -12,6 +12,9 @@ function security() {
             if (datos.error == 1) {
                 window.location.href = "../index.html";
             }
+            else if (datos.tipo_usr != 1) {
+                window.location.href = "../modulos/dashboard.html"
+            }
             else {
                 usuario = datos.usuario;
                 nombre = datos.nombre;
@@ -119,7 +122,6 @@ function updateUsuarios(usuariosBusqueda)
 
     let html = '';
 
-
     usuariosBusqueda.forEach(usuario => {
         html += `
             <div class="row justify-content-center">
@@ -129,8 +131,7 @@ function updateUsuarios(usuariosBusqueda)
                             <h5 class="mb-0">Editar Usuario: ${usuario.usuario}</h5>
                         </div>
                         <div class="card-body">
-                            <form id="form-${usuario.usuario}" onsubmit="event.preventDefault();">
-                                <!-- Usuario (solo lectura) -->
+                            <form id="form-${usuario.usuario}" data-usuario='${JSON.stringify(usuario)}'>
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Usuario</label>
                                     <input type="text" class="form-control" value="${usuario.usuario}" readonly>
@@ -163,7 +164,7 @@ function updateUsuarios(usuariosBusqueda)
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold">Correo</label>
-                                        <input type="email" class="form-control" name="correo" value="${usuario.correo || ''}" required pattern=".*@chihuahua2\.tecnm\.mx$" title="El correo debe terminar en @chihuahua2.tecnm.mx">
+                                        <input type="email" class="form-control" name="correo" value="${usuario.correo || ''}" required pattern=".*@chihuahua2\.tecnm\.mx$" title="El correo debe terminar en @chihuahua2.tecnm.mx" readonly>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold">Celular</label>
@@ -174,7 +175,7 @@ function updateUsuarios(usuariosBusqueda)
                                 <!-- Contraseña (requiere contraseña anterior) -->
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Cambiar Contraseña</label>
-                                    <input type="password" class="form-control mb-2" name="contraseña_anterior" placeholder="Contraseña anterior">
+                                    <!-- <input type="password" class="form-control mb-2" name="contraseña_anterior" placeholder="Contraseña anterior"> -->
                                     <input type="password" class="form-control" name="contraseña_nueva" placeholder="Contraseña nueva">
                                     <small class="text-muted">Dejar en blanco para no cambiar</small>
                                 </div>
@@ -196,7 +197,7 @@ function updateUsuarios(usuariosBusqueda)
                                     <!-- Intentos (solo lectura) -->
                                     <div class="col-md-6">
                                         <label class="form-label fw-bold">Intentos</label>
-                                        <input type="text" class="form-control" value="${usuario.ctrl_intentos || 0}" readonly>
+                                        <input type="text" name="ctrl_intentos" id="intentos${usuario.usuario}" class="form-control" value="${usuario.ctrl_intentos || 0}" readonly>
                                     </div>
                                 </div>
                                 
@@ -214,7 +215,7 @@ function updateUsuarios(usuariosBusqueda)
                                 
                                 <!-- Botones de acción -->
                                 <div class="d-flex gap-2 justify-content-end mt-4">
-                                    <button type="button" class="btn btn-secondary" onclick="cancelarEdicion('${usuario.usuario}')">Cancelar</button>
+                                    <button type="button" class="btn btn-secondary" onclick="buscarUsuario()">Cancelar</button>
                                     <button type="submit" class="btn btn-success">Guardar Cambios</button>
                                 </div>
                             </form>
@@ -227,4 +228,201 @@ function updateUsuarios(usuariosBusqueda)
 
     div.innerHTML = html;
     contenido.appendChild(div);
+
+    usuariosBusqueda.forEach(usuario => {
+        const form = document.getElementById(`form-${usuario.usuario}`);
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const usuarioData = JSON.parse(this.dataset.usuario);
+                modificarDatos(usuarioData.usuario);
+            });
+        }
+    });
+}
+
+function modificarDatos(usuarioObj) {
+    let nombreUsuario = typeof usuarioObj === 'object' ? usuarioObj.usuario : usuarioObj;
+    let form = document.getElementById(`form-${nombreUsuario}`);
+    if (!form) {
+        console.error("Formulario no encontrado para:", nombreUsuario);
+        return;
+    }
+
+    let formData = {
+        usuario: nombreUsuario,
+        primer_nombre: form.querySelector('[name="primer_nombre"]').value,
+        segundo_nombre: form.querySelector('[name="segundo_nombre"]').value,
+        apell_pat: form.querySelector('[name="apell_pat"]').value,
+        apell_mat: form.querySelector('[name="apell_mat"]').value,
+        correo: form.querySelector('[name="correo"]').value,
+        celular: form.querySelector('[name="celular"]').value,
+        //contrasena_anterior: form.querySelector('[name="contraseña_anterior"]').value,
+        contrase: form.querySelector('[name="contraseña_nueva"]').value.trim(),
+        flag: form.querySelector('[name="flag"]').value,
+        tipo_usr: form.querySelector('[name="tipo_usr"]').value,
+        ctrl_intentos: form.querySelector('[name="ctrl_intentos"]').value
+    };
+
+    let formDataUsuario = {
+        usuario: nombreUsuario
+    };
+
+    let url = "../includes/php/verificacion.php";
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(formDataUsuario),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(respuesta => {
+            return respuesta.json();
+        })
+        .then(datos => {
+            let error = datos.error;
+            let mensaje = datos.mensaje;
+            if (error == 1) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR 1';
+                msg_3.showModal();
+            }
+            else if (error == 2) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR 2';
+                msg_3.showModal();
+            }
+            else if (error == 100) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR EN LA CONEXION';
+                msg_3.showModal();
+            }
+            else if (error == 0) {
+                fetchModificacion(datos.data.contrase, datos.data.flag, formData);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+function fetchModificacion(contrase, flag, formData) {
+    let datos = formData;
+
+    if (formData.contrase == "") {
+        datos['contrase'] = contrase;
+    }
+
+    if (formData.flag == 1 && flag == 0) {
+        datos['ctrl_intentos'] = 0;
+    }
+
+    let url = "../includes/php/modificarUsuario.php";
+    fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(datos),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(respuesta => {
+            return respuesta.json();
+            //return respuesta.text();
+        })
+        .then(datos => {
+            let error = datos.error;
+            let mensaje = datos.mensaje;
+            if (error == 1) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR 1';
+                msg_3.showModal();
+            }
+            else if (error == 100) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'ERROR EN LA CONEXION';
+                msg_3.showModal();
+            }
+            else if (error == 0) {
+                msg_cuerpo_3.innerHTML = mensaje;
+                msg_titulo_3.innerHTML = 'MODIFIACIÓN EXITOSA';
+                msg_3.showModal();
+                buscarUsuario();
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+function toggleEstado(boton, usuario) {
+    msg_titulo_2.innerHTML = "¿ACTIVAR/DESACTIVAR USUARIO?";
+    msg_cuerpo_2.innerHTML = "Estás seguro de activar/desactivar este usuario?";
+    msg_validar_2.innerHTML = "ACTIVAR/DESACTIVAR USUARIO";
+    msg_2.showModal();
+
+    // Remover listeners anteriores (opcional pero recomendado)
+    const newConfirmListener = () => {
+        // Alternar entre 1 (Activo) y 0 (Inactivo)
+        let nuevoValor = boton.textContent.includes('Activo') ? 0 : 1;
+
+        // Actualizar el campo oculto
+        let inputHidden = boton.parentElement.querySelector('input[name="flag"]');
+        inputHidden.value = nuevoValor;
+
+        // Cambiar apariencia y texto del botón
+        if (nuevoValor == 1) {
+            boton.textContent = 'Activo';
+            boton.classList.remove('btn-danger');
+            boton.classList.add('btn-success');
+        } else {
+            boton.textContent = 'Inactivo';
+            boton.classList.remove('btn-success');
+            boton.classList.add('btn-danger');
+        }
+        msg_2.close();
+    };
+
+    const newCancelListener = () => {
+        msg_2.close();
+    };
+
+    // Usar { once: true } para que se ejecuten solo una vez
+    msg_validar_2.addEventListener("click", newConfirmListener, { once: true });
+    cancelar_2.addEventListener("click", newCancelListener, { once: true });
+}
+
+function toggleTipoUsuario(boton, usuario) {
+    msg_titulo_4.innerHTML = "¿CAMBIAR PRIVILEGIOS?";
+    msg_cuerpo_4.innerHTML = "Estás seguro de cambiar los privilegios?";
+    msg_validar_4.innerHTML = "CAMBIAR TIPO";
+    msg_4.showModal();
+
+    const newConfirmListener = () => {
+        // Alternar entre 1 y 0
+        let nuevoValor = boton.textContent.includes('Administrador') ? 0 : 1;
+
+        // Actualizar el campo oculto
+        let inputHidden = boton.parentElement.querySelector('input[name="tipo_usr"]');
+        inputHidden.value = nuevoValor;
+
+        // Cambiar apariencia y texto del botón
+        if (nuevoValor == 1) {
+            boton.textContent = 'Administrador';
+            boton.classList.remove('btn-secondary');
+            boton.classList.add('btn-primary');
+        } else {
+            boton.textContent = 'Usuario';
+            boton.classList.remove('btn-primary');
+            boton.classList.add('btn-secondary');
+        }
+        msg_4.close();
+    };
+
+    const newCancelListener = () => {
+        msg_4.close();
+    };
+
+    // Usar { once: true } para que se ejecuten solo una vez
+    msg_validar_4.addEventListener("click", newConfirmListener, { once: true });
+    cancelar_4.addEventListener("click", newCancelListener, { once: true });
 }

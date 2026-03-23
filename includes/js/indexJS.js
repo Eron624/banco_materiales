@@ -157,7 +157,6 @@ function registroNuevo() {
             })
             .then(respuesta => {
                 return respuesta.json();
-                //return respuesta.text();
             })
             .then(datos => {
                 let error = datos.error;
