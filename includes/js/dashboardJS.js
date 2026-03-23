@@ -8,14 +8,7 @@ let paginaComentarios = {};
 
 window.addEventListener("load", () => {
     security();
-    cargarMasPublicaciones();
-    window.addEventListener('scroll', function () {
-        if (cargando || !hayMasPublicaciones) return;
-
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-            cargarMasPublicaciones();
-        }
-    });
+    //info.showModal();
 });
 
 function adminFunciones() {
@@ -63,6 +56,14 @@ function security() {
                 }
                 else {
                 }
+                cargarMasPublicaciones();
+                window.addEventListener('scroll', function () {
+                    if (cargando || !hayMasPublicaciones) return;
+
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+                        cargarMasPublicaciones();
+                    }
+                });
             }
         })
         .catch(error => {
