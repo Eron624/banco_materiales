@@ -147,6 +147,7 @@ dialog .modal-content {
     max-width: 90vw;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .formulario-registro {
     margin-top: 20px;
 }
@@ -216,4 +217,27 @@ dialog .modal-content {
 
 .btn-registrar:hover {
     background-color: #45a049;
+}
+footer {
+    background-color: #1b5739;
+    color: #ecf0f1;
+    text-align: center;
+    padding: 1.5rem;
+    width: 100%;
+    margin-top: auto;
+    border-top: 3px solid #1d8720;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+footer small {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    color: #bdc3c7;
+    opacity: 0.8;
 }

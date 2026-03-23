@@ -65,7 +65,7 @@ function logout() {
 
 function buscarUsuario() {
     let busqueda = document.getElementById("busqueda").value;
-    let datos = {busqueda: busqueda};
+    let datos = { busqueda: busqueda };
 
     let url = "../includes/php/traerUsuarios.php";
     fetch(url, {
@@ -101,8 +101,7 @@ function buscarUsuario() {
         });
 }
 
-function updateUsuarios(usuariosBusqueda)
-{
+function updateUsuarios(usuariosBusqueda) {
     let contenido = document.getElementById("contenido");
     contenido.innerHTML = '';
 

@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/banco_materiales/includes/php/conexionBD.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/banco_materiales/includes/php/ConexionBD.php');
 
 $obj_conexion = new ConexionBD();
 $conn = $obj_conexion->getConexion();

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Banco de Materiales</title>
+
+    <link rel="shortcut icon" href="../includes/multimedia/icono.svg" />
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -49,8 +52,8 @@
                         </div>
                     </div>
                 </div>
-                </div>
-                </nav>
+            </div>
+            </nav>
     </header>
 
     <!-- CONTENIDO PRINCIPAL -->
@@ -61,12 +64,12 @@
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <h4 class="card-title text-success mb-3">Nueva publicación</h4>
-                <form id="formPublicacion" onsubmit="event.preventDefault(); agregarPublicacion(event);">
+                <form id="formPublicacion" onsubmit="event.preventDefault(); agregarPublicacion(event); deshabilitarBotonPublicar();">
                     <input class="form-control mb-2" type="text" placeholder="Título del material" id="titulo" required maxlength="100">
                     <textarea class="form-control mb-2" placeholder="Descripción del material" id="descripcion" rows="3" required
                         maxlength="250"></textarea>
                     <input class="form-control mb-3" type="file" id="imagen" accept="image/*">
-                    <button type="submit" class="btn btn-success w-100">
+                    <button id="botonPublicar" type="submit" class="btn btn-success w-100">
                         Publicar
                     </button>
                 </form>
@@ -155,8 +158,10 @@
     <dialog id="info" class="p-0 border-0 rounded-3 shadow-lg">
         <div class="modal-content p-4" style="min-width: 300px;">
             <h2 class="h4 mb-3">¡Queremos conocer tu experiencia!</h2>
-            <p class="mb-4">Cuéntanos, ¿Cómo ha sido tu experiencia con la aplicación web hasta ahora? Tu feedback nos ayuda
-                a seguir mejorando. 👉🏾<a href="https://forms.office.com" target="_blank">Acceder a la encuesta</a>👈🏾</p>
+            <p class="mb-4">Cuéntanos, ¿Cómo ha sido tu experiencia con la aplicación web hasta ahora? Tu feedback nos
+                ayuda
+                a seguir mejorando. 👉🏾<a href="https://forms.office.com" target="_blank">Acceder a la encuesta</a>👈🏾
+            </p>
             <div class="d-flex gap-2 justify-content-end">
                 <button class="btn btn-secondary" onclick="info.close();">CERRAR</button>
             </div>

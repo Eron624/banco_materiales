@@ -30,8 +30,7 @@ function verificarSesion() {
         });
 }
 
-function login()
-{
+function login() {
     let usuario = document.getElementById("usuario").value;
     usuario = extraerNum(usuario);
     let contrase = document.getElementById("contrase").value;

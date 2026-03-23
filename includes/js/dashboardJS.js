@@ -11,6 +11,16 @@ window.addEventListener("load", () => {
     //info.showModal();
 });
 
+function deshabilitarBotonPublicar() {
+    let botonPublicar = document.getElementById("botonPublicar");
+    botonPublicar.disabled = true;
+}
+
+function deshabilitarBotonPublicarComentario(idPubli) {
+    let botonPublicarComentario = document.getElementById(`botonPublicarComentario${idPubli}`);
+    botonPublicarComentario.disabled = true;
+}
+
 function adminFunciones() {
     let ulNav = document.getElementById("ulNav");
 
@@ -22,8 +32,7 @@ function adminFunciones() {
     ulNav.appendChild(li);
 }
 
-function datosUsuario(nombre, usuario)
-{
+function datosUsuario(nombre, usuario) {
     let divCuenta = document.getElementById("divCuenta");
 
     let cuenta = document.createElement("div");
@@ -274,10 +283,10 @@ function generarPublicaciones(datos, reiniciarPaginacion = false) {
                     Cargar más comentarios...
                 </button>
                     
-                <form class="mt-3" id="formComent${item.idPubli}" onsubmit="event.preventDefault(); agregarComent(${item.idPubli});">
+                <form class="mt-3" id="formComent${item.idPubli}" onsubmit="event.preventDefault(); agregarComent(${item.idPubli}); deshabilitarBotonPublicarComentario(${item.idPubli});">
                     <div class="input-group">
                         <input type="text" class="form-control" id="coment${item.idPubli}" placeholder="Escribe un comentario..." required maxlength="250">
-                        <button class="btn btn-secondary" type="submit">Publicar</button>
+                        <button id="botonPublicarComentario${item.idPubli}" class="btn btn-secondary" type="submit">Publicar</button>
                     </div>
                 </form>
             </div>
@@ -488,6 +497,11 @@ function agregarComent(idPubli) {
                 msg_titulo_3.innerHTML = 'REGISTRADO CORRECTAMENTE';
                 //msg_3.showModal();
 
+                let botonComentario = document.getElementById(`botonPublicarComentario${idPubli}`);
+                if (botonComentario) {
+                    botonComentario.removeAttribute('disabled');
+                }
+
                 document.getElementById(`formComent${idPubli}`).reset();
                 document.getElementById(`listaComent${idPubli}`).innerHTML = ``;
                 paginaComentarios[idPubli] = 1;
@@ -677,6 +691,9 @@ function actualizarBadgeDisponibilidad(idPubli, nuevaDisponibilidad) {
 }
 
 function cargarMasPublicaciones() {
+    let botonPublicar = document.getElementById("botonPublicar");
+    botonPublicar.removeAttribute('disabled');
+
     if (document.getElementById('busqueda').value.trim() !== '') return;
 
     if (cargando || !hayMasPublicaciones) return;
