@@ -34,7 +34,7 @@ function datosUsuario(nombre, usuario) {
     let cuenta = document.createElement("div");
     cuenta.className = "text-white px-3 py-2 rounded";
 
-    cuenta.innerHTML = `<h4 class="m-0 fs-6">Hola ${nombre}, ${usuario}</h4>`;
+    cuenta.innerHTML = `<h4 class="m-0 fs-6">Hola <a class="text-decoration-none text-reset enlace-usuario" href="cuenta.html">${nombre}, ${usuario}</a></h4>`;
 
     divCuenta.appendChild(cuenta);
 }
@@ -101,6 +101,19 @@ function buscarUsuario() {
         });
 }
 
+function actualizarContadorResultados(cantidad) {
+    let numBusqueda = document.getElementById("numBusqueda");
+    if (numBusqueda) {
+        if (cantidad === 0) {
+            numBusqueda.innerHTML = '';
+        } else if (cantidad === 1) {
+            numBusqueda.innerHTML = `Se encontró ${cantidad} resultado`;
+        } else {
+            numBusqueda.innerHTML = `Se encontraron ${cantidad} resultados`;
+        }
+    }
+}
+
 function updateUsuarios(usuariosBusqueda) {
     let contenido = document.getElementById("contenido");
     contenido.innerHTML = '';
@@ -113,8 +126,11 @@ function updateUsuarios(usuariosBusqueda) {
                 </div>
             </div>
         `;
+        actualizarContadorResultados(0);
         return;
     }
+
+    actualizarContadorResultados(usuariosBusqueda.length);
 
     let div = document.createElement("div");
     div.className = "container mt-4";
@@ -424,4 +440,14 @@ function toggleTipoUsuario(boton, usuario) {
     // Usar { once: true } para que se ejecuten solo una vez
     msg_validar_4.addEventListener("click", newConfirmListener, { once: true });
     cancelar_4.addEventListener("click", newCancelListener, { once: true });
+}
+
+function mostrarInfo() {
+    msg_titulo_3.innerHTML = "INFORMACIÓN DE BANCO DE MATERIALES";
+    msg_cuerpo_3.innerHTML = `<p><strong>Banco de Materiales Escolares</strong> es una plataforma web diseñada para conectar a estudiantes del Instituto Tecnológico de Chihuahua II que desean donar, vender o intercambiar materiales escolares con aquellos que los necesitan.</p><p><strong>🎯 Objetivo:</strong><br> Promover el intercambio responsable de materiales escolares para optimizar recursos, reducir el desperdicio y fomentar una comunidad colaborativa dentro del plantel.</p><p><strong>📚 ¿Qué materiales puedes encontrar?</strong><br> Libros, calculadoras, equipo de laboratorio y otros recursos académicos en buen estado.</p><p><strong>🔧 Funcionalidades principales:</strong><br> • Registro con número de control y correo institucional<br> • Publicación de materiales (donar, vender o intercambiar)<br> • Feed de publicaciones con imágenes y descripciones<br> • Sistema de comentarios para preguntar sobre los materiales<br> • Cierre de sesión seguro</p><p><strong>🌱 Impacto esperado:</strong><br> Fomentar una cultura de sostenibilidad, solidaridad y ahorro económico entre los estudiantes, aprovechando al máximo los recursos disponibles.</p><p><strong>📱 Accesible desde cualquier navegador web</strong>, sin necesidad de descargar una aplicación móvil.</p><p><strong>📧 Contacto:</strong><br> Si tienes dudas, comentarios o sugerencias, puedes escribirnos a:<br> • <a href="mailto:LC20550585@chihuahua2.tecnm.mx?subject=Banco%20de%20Materiales%20Escolares&cc=L23550736@chihuahua2.tecnm.mx,L23550741@chihuahua2.tecnm.mx,L23550748@chihuahua2.tecnm.mx"
+                    target="_blank" class="email-link">LC20550585@chihuahua2.tecnm.mx</a><br> • <a href="mailto:L23550736@chihuahua2.tecnm.mx?subject=Banco%20de%20Materiales%20Escolares&cc=LC20550585@chihuahua2.tecnm.mx,L23550741@chihuahua2.tecnm.mx,L23550748@chihuahua2.tecnm.mx"
+                    target="_blank" class="email-link">L23550736@chihuahua2.tecnm.mx</a><br> • <a href="mailto:L23550741@chihuahua2.tecnm.mx?subject=Banco%20de%20Materiales%20Escolares&cc=L23550736@chihuahua2.tecnm.mx,LC20550585@chihuahua2.tecnm.mx,L23550748@chihuahua2.tecnm.mx"
+                    target="_blank" class="email-link">L23550741@chihuahua2.tecnm.mx</a><br> • <a href="mailto:L23550748@chihuahua2.tecnm.mx?subject=Banco%20de%20Materiales%20Escolares&cc=L23550736@chihuahua2.tecnm.mx,L23550741@chihuahua2.tecnm.mx,LC20550585@chihuahua2.tecnm.mx"
+                    target="_blank" class="email-link">L23550748@chihuahua2.tecnm.mx</a></p><p><em>Únete a la comunidad y dale una segunda vida a los materiales escolares. ¡Tu participación hace la diferencia!</em></p>`;
+    msg_3.showModal();
 }

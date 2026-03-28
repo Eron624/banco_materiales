@@ -25,11 +25,31 @@
 }
 
 .navbar-nav .nav-link:hover,
-#cerrarSesion:hover {
+#cerrarSesion:hover,
+.enlace-usuario:hover {
     background-color: #2f6d32 !important;
     border-radius: 5px;
 }
 
+.email-link {
+    color: inherit;
+    /*text-decoration: none;*/
+    transition: color 0.3s ease;
+}
+
+.email-link:hover {
+    color: #45a049;
+}
+
+#numBusqueda {
+    display: block;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #198754;
+    border-top: 1px solid #e9ecef;
+}
 dialog {
     margin: auto;
     border: none;

@@ -12,53 +12,35 @@ $datos_request = sanitizar($datos_request);
 $obj_conexion = new ConexionBD();
 $conn = $obj_conexion->getConexion();
 
+$contrase = $datos_request['contrase'];
 $usuario = $datos_request['usuario'];
+
 $datos = [];
 
 if (is_null($conn)) {
     $error = 100;
     $mensaje = "ERROR REPORTARLO A LC20550585@chihuahua2.tecnm.mx";
 } else {
-    if (verificarUsuario($usuario)) {
-        $error = 0;
-        $mensaje = "USUARIO ENCONTRADO";
-        $datos['data'] = verificarUsuario($usuario);
-    } else {
-        $error = 1;
-        $mensaje = "USUARIO NO ENCONTRADO";
-    }
-}
-$datos['error'] = $error;
-$datos['mensaje'] = $mensaje;
-echo json_encode($datos);
-exit;
-
-function verificarUsuario($usuario)
-{
     try {
-        $obj_conexion = new ConexionBD();
-        $conn = $obj_conexion->getConexion();
+        $qry_cambio_contrase = "UPDATE usuario SET contrase = :contrase WHERE usuario = :usuario";
 
-        $qry_usuario = "SELECT usuario, contrase, flag FROM usuario WHERE usuario = :usuario";
-
-        $stmt = $conn->prepare($qry_usuario);
+        $stmt = $conn->prepare($qry_cambio_contrase);
         $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':contrase', $contrase);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
-        $registro = $stmt->fetch();
-        $count = $stmt->rowcount();
 
-        if ($count == 1) {
-            return $registro;
-        } else {
-            return false;
-        }
+        $error = 0;
+        $mensaje = "La Contraseña se Modificó con Éxito";
     } catch (PDOException $e) {
-        $datos['error'] = 2;
+        $datos['error'] = 1;
         $datos['mensaje'] = $e->getMessage();
 
         echo json_encode($datos);
         exit;
     }
 }
+$datos['error'] = $error;
+$datos['mensaje'] = $mensaje;
+echo json_encode($datos);
 ?>

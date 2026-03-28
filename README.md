@@ -42,12 +42,6 @@ CREATE TABLE `publicaciones` (
 -- Dumping data for table `publicaciones`
 --
 
-LOCK TABLES `publicaciones` WRITE;
-/*!40000 ALTER TABLE `publicaciones` DISABLE KEYS */;
-INSERT INTO `publicaciones` VALUES (1,'awfaf','awfawf','','2026-03-11 22:50:27',1,'Ethan Acosta'),(2,'ssef','hola','','2026-03-11 23:24:11',1,'Ethan Acosta'),(3,'Nutria','Que Bonita','https://i.ibb.co/nNJ5BVH6/c5727066156e.jpg','2026-03-11 23:41:44',1,'Ethan Acosta'),(4,'hola','adiós','','2026-03-11 23:47:28',1,'Ethan Acosta');
-/*!40000 ALTER TABLE `publicaciones` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `usuario`
 --
@@ -74,11 +68,6 @@ CREATE TABLE `usuario` (
 -- Dumping data for table `usuario`
 --
 
-LOCK TABLES `usuario` WRITE;
-/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'hola','Ethan','Levi','Acosta','Galindo','LC20550585@chihuahua2.tecnm.mx','6143435669',0,1),(2,'hola','Oliver','','Aiku','J','L12345@chihuahua2.tecnm.mx','6141234567',0,1),(4,'hi','hi','hi','hi','hi','L12345@chihuahua2.tecnm.mx','5643165',0,1),(20550585,'nice','Ethan','Levi','Acosta','Galindo','LC20550585@chihuahua2.tecnm.mx','6143435669',0,1);
-/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

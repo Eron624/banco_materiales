@@ -13,52 +13,39 @@ $obj_conexion = new ConexionBD();
 $conn = $obj_conexion->getConexion();
 
 $usuario = $datos_request['usuario'];
+
 $datos = [];
 
 if (is_null($conn)) {
     $error = 100;
     $mensaje = "ERROR REPORTARLO A LC20550585@chihuahua2.tecnm.mx";
 } else {
-    if (verificarUsuario($usuario)) {
-        $error = 0;
-        $mensaje = "USUARIO ENCONTRADO";
-        $datos['data'] = verificarUsuario($usuario);
-    } else {
-        $error = 1;
-        $mensaje = "USUARIO NO ENCONTRADO";
-    }
-}
-$datos['error'] = $error;
-$datos['mensaje'] = $mensaje;
-echo json_encode($datos);
-exit;
+    try
+    {
+        $qry_datos_usuario = "SELECT usuario, contrase, primer_nombre, segundo_nombre, apell_pat, apell_mat, correo, celular 
+                                FROM usuario WHERE usuario = :usuario";
 
-function verificarUsuario($usuario)
-{
-    try {
-        $obj_conexion = new ConexionBD();
-        $conn = $obj_conexion->getConexion();
-
-        $qry_usuario = "SELECT usuario, contrase, flag FROM usuario WHERE usuario = :usuario";
-
-        $stmt = $conn->prepare($qry_usuario);
+        $stmt = $conn->prepare($qry_datos_usuario);
         $stmt->bindParam(':usuario', $usuario);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $registro = $stmt->fetch();
-        $count = $stmt->rowcount();
 
-        if ($count == 1) {
-            return $registro;
-        } else {
-            return false;
-        }
-    } catch (PDOException $e) {
-        $datos['error'] = 2;
+        $datos['data'] = $registro;
+
+        $error = 0;
+        $mensaje = "ENVÍO DE DATOS CORRECTO";
+    }
+    catch (PDOException $e)
+    {
+        $datos['error'] = 1;
         $datos['mensaje'] = $e->getMessage();
 
         echo json_encode($datos);
         exit;
     }
 }
+$datos['error'] = $error;
+$datos['mensaje'] = $mensaje;
+echo json_encode($datos);
 ?>

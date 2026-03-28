@@ -72,7 +72,8 @@ nav {
 
 .menu li:hover,
 #cuenta:hover,
-#cerrarSesion:hover {
+#cerrarSesion:hover,
+.enlace-usuario:hover {
     background-color: #2f6d32;
     border-radius: 5px;
     cursor: pointer;
@@ -133,4 +134,3 @@ nav {
     min-height: calc(100vh - 80vh - 120px);
     background-color: #f5f5f5;
 }
-

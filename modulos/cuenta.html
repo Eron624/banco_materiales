@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Banco de Materiales</title>
+
+    <link rel="shortcut icon" href="../includes/multimedia/icono.svg" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS Personalizados -->
+    <link rel="stylesheet" href="../includes/css/dashboard.css">
+</head>
+
+<body class="bg-light">
+    <!-- Encabezado -->
+    <header class="bg-white shadow-sm">
+        <div class="container">
+            <div
+                class="d-flex flex-wrap justify-content-center justify-content-md-between align-items-center gap-3 py-3">
+                <img id="logo1" src="../includes/multimedia/logoTec.jpg" class="img-fluid rounded"
+                    style="max-width: 200px; max-height: 80px;" alt="Tecnológico Nacional de México" title="TEC NM">
+                <img id="logo2" src="../includes/multimedia/logoTec2.jpg" class="img-fluid rounded"
+                    style="max-width: 200px; max-height: 80px;" alt="Instituto Tecnológico de Chihuahua 2"
+                    title="ITCH 2">
+            </div>
+        </div>
+
+        <!-- <div class="barraNavegacion"> -->
+        <nav class="navbar navbar-expand-lg" style="background-color: #45a049;">
+            <div class="container">
+                <button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul id="ulNav" class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="dashboard.html" id="inicio-link">INICIO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="javascript:void(0)" onclick="mostrarInfo();" id="info">INFORMACIÓN</a>
+                        </li>
+                    </ul>
+                    <div id="divCuenta" class="d-flex">
+                    </div>
+                    <div class="d-flex">
+                        <div id="cerrarSesion" class="text-white px-3 py-2 rounded" style="cursor: pointer;"
+                            onclick="logout()">
+                            <h4 class="m-0 fs-6">CERRAR SESIÓN</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h6>Para Modificar Información Comunícate desde tu Correo Institucional a <a
+                    href="mailto:LC20550585@chihuahua2.tecnm.mx?subject=Banco%20de%20Materiales%20Escolares&cc=L23550736@chihuahua2.tecnm.mx,L23550741@chihuahua2.tecnm.mx,L23550748@chihuahua2.tecnm.mx"
+                    target="_blank" class="email-link">LC20550585@chihuahua2.tecnm.mx</a></h6>
+        </div>
+    </div>
+    <br>
+
+    <main>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0" id="editUsuario">Editar Usuario: </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formCuenta" onsubmit="event.preventDefault(); cambiarContrase();">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Usuario</label>
+                                <input type="text" class="form-control" id="usuario" readonly required>
+                            </div>
+        
+                            <!-- Nombres y Apellidos -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Primer Nombre</label>
+                                    <input type="text" class="form-control" id="primer_nombre" name="primer_nombre" readonly required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Segundo Nombre</label>
+                                    <input type="text" class="form-control" id="segundo_nombre" name="segundo_nombre" readonly>
+                                </div>
+                            </div>
+        
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Apellido Paterno</label>
+                                    <input type="text" class="form-control" id="apell_pat" name="apell_pat" readonly required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Apellido Materno</label>
+                                    <input type="text" class="form-control" id="apell_mat" name="apell_mat" readonly required>
+                                </div>
+                            </div>
+        
+                            <!-- Correo y Celular -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Correo</label>
+                                    <input type="email" class="form-control" id="correo" name="correo" required pattern=".*@chihuahua2\.tecnm\.mx$" title="El correo debe terminar en @chihuahua2.tecnm.mx" readonly required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Celular</label>
+                                    <input type="tel" class="form-control" id="celular" name="celular" readonly required>
+                                </div>
+                            </div>
+                            <hr>
+                            <!-- Contraseña (requiere contraseña anterior) -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Cambiar Contraseña</label>
+                                <input type="password" class="form-control mb-2" id="contrase_anterior" name="contrase_anterior" placeholder="Contraseña Anterior" required>
+                                <input type="password" class="form-control mb-2" id="contrase_nueva" name="contrase_nueva" placeholder="Contraseña Nueva" required>
+                                <input type="password" class="form-control" id="contrase_repetida" name="contrase_repetida" placeholder="Repita la Contraseña" required>
+                            </div>
+        
+                            <!-- Botones de acción -->
+                            <div class="d-flex gap-2 justify-content-end mt-4">
+                                <button type="button" class="btn btn-secondary" onclick="location.reload();">Cancelar</button>
+                                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <dialog id='msg' class="p-0 border-0 rounded-3 shadow-lg">
+        <div class="modal-content p-4" style="min-width: 300px;">
+            <h2 id='msg_titulo' class="h4 mb-3">CERRAR SESIÓN</h2>
+            <p id='msg_cuerpo' class="mb-4">¿Estás seguro de Cerrar Sesión?</p>
+            <div class="d-flex gap-2 justify-content-end">
+                <button id='msg_cerrar' class="btn btn-danger">CERRAR SESIÓN</button>
+                <button id="cancelar" class="btn btn-secondary" onclick="msg.close();">CANCELAR</button>
+            </div>
+        </div>
+    </dialog>
+    
+    <dialog id='msg_3' class="p-0 border-0 rounded-3 shadow-lg">
+        <div class="modal-content p-4" style="min-width: 300px;">
+            <h2 id='msg_titulo_3' class="h4 mb-3"></h2>
+            <p id='msg_cuerpo_3' class="mb-4"></p>
+            <div class="d-flex justify-content-end">
+                <button id='msg_cerrar_3' class="btn btn-primary" onclick="msg_3.close();">CERRAR</button>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../includes/js/cuentaJS.js"></script>
+</body>
+</html>
